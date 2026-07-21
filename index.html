@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="최규원의 데이터 분석 및 AI 프로젝트 포트폴리오"
+  >
+
+  <title>최규원 | Data & AI Portfolio</title>
+
+  <!-- 디자인 파일 연결 -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- 프로젝트 데이터와 기능 파일 연결 -->
+  <script src="js/projects.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+
+<body>
+  <!-- 상단 메뉴 -->
+  <header class="header">
+    <div class="container nav-container">
+      <a href="#home" class="logo">
+        GYUWON<span>.</span>
+      </a>
+
+      <nav class="nav">
+        <a href="#home">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- 첫 화면 -->
+    <section id="home" class="hero">
+      <div class="container hero-container">
+        <div class="hero-text">
+          <p class="eyebrow">DATA · AI · ENGINEERING</p>
+
+          <h1>
+            데이터를 분석하고<br>
+            <span>의미를 설명합니다.</span>
+          </h1>
+
+          <p class="hero-description">
+            안녕하세요. 데이터 분석과 AI를 공부하고 있는 최규원입니다.
+            SKALA에서 수행한 프로젝트와 학습 과정을 기록합니다.
+          </p>
+
+          <div class="hero-buttons">
+            <a href="#projects" class="button button-primary">
+              프로젝트 보기
+            </a>
+
+            <!-- 나중에 실제 GitHub 주소로 변경 -->
+            <a
+              href="https://github.com/gyu2301"
+              class="button button-secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub 방문
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <p class="hero-card-label">CURRENTLY LEARNING</p>
+
+          <h2>Data Analysis<br>& Generative AI</h2>
+
+          <div class="hero-card-tags">
+            <span>Python</span>
+            <span>Statistics</span>
+            <span>Machine Learning</span>
+            <span>Generative AI</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 한눈에 보기 -->
+    <section class="summary">
+      <div class="container summary-grid">
+        <article class="summary-item">
+          <strong id="project-count">2</strong>
+          <span>Projects</span>
+        </article>
+
+        <article class="summary-item">
+          <strong>Python</strong>
+          <span>Main Language</span>
+        </article>
+
+        <article class="summary-item">
+          <strong>SKALA</strong>
+          <span>Learning Journey</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- 프로젝트 -->
+    <section id="projects" class="section projects-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">FEATURED WORK</p>
+            <h2>Projects</h2>
+          </div>
+
+          <p>
+            코드를 실행하는 데 그치지 않고,
+            분석 과정과 결과의 의미를 함께 정리했습니다.
+          </p>
+        </div>
+
+        <!-- projects.js의 정보로 프로젝트 카드가 자동 생성되는 공간 -->
+        <div id="projects-grid" class="projects-grid">
+          <p class="loading-message">
+            프로젝트 정보를 불러오는 중입니다.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 기술 -->
+    <section id="skills" class="section skills-section">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">WHAT I USE</p>
+            <h2>Skills</h2>
+          </div>
+
+          <p>
+            현재 학습하고 실습에 활용하고 있는 기술입니다.
+          </p>
+        </div>
+
+        <div class="skills-grid">
+          <article class="skill-card">
+            <span class="skill-number">01</span>
+            <h3>Programming</h3>
+
+            <div class="skill-tags">
+              <span>Python</span>
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+              <span>Git</span>
+            </div>
+          </article>
+
+          <article class="skill-card">
+            <span class="skill-number">02</span>
+            <h3>Data Analysis</h3>
+
+            <div class="skill-tags">
+              <span>Pandas</span>
+              <span>NumPy</span>
+              <span>Matplotlib</span>
+              <span>Seaborn</span>
+            </div>
+          </article>
+
+          <article class="skill-card">
+            <span class="skill-number">03</span>
+            <h3>Statistics & AI</h3>
+
+            <div class="skill-tags">
+              <span>기초통계</span>
+              <span>가설검정</span>
+              <span>회귀분석</span>
+              <span>Scikit-learn</span>
+              <span>Generative AI</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 자기소개 -->
+    <section id="about" class="section about-section">
+      <div class="container about-container">
+        <div class="about-title">
+          <p class="section-label">ABOUT ME</p>
+          <h2>배우고,<br>분석하고,<br>기록합니다.</h2>
+        </div>
+
+        <div class="about-content">
+          <p class="about-introduction">
+            데이터 분석과 AI 기술을 공부하며,
+            실습 결과를 논리적으로 해석하는 능력을 기르고 있습니다.
+          </p>
+
+          <p>
+            현재 SKALA 교육과정에서 Python, 데이터 분석, 통계,
+            머신러닝 및 생성형 AI를 학습하고 있습니다.
+          </p>
+
+          <p>
+            이 포트폴리오에는 프로젝트의 결과뿐만 아니라
+            분석 과정에서 마주친 문제와 해결 과정,
+            새롭게 배운 내용을 함께 기록합니다.
+          </p>
+
+          <div class="about-points">
+            <div>
+              <strong>01</strong>
+              <span>데이터를 이해하는 분석</span>
+            </div>
+
+            <div>
+              <strong>02</strong>
+              <span>근거를 바탕으로 한 해석</span>
+            </div>
+
+            <div>
+              <strong>03</strong>
+              <span>과정을 보여주는 기록</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 연락처 -->
+    <section id="contact" class="section contact-section">
+      <div class="container contact-box">
+        <div>
+          <p class="section-label">GET IN TOUCH</p>
+          <h2>함께 이야기해요.</h2>
+
+          <p>
+            프로젝트와 학습 과정은 계속 업데이트할 예정입니다.
+          </p>
+        </div>
+
+        <div class="contact-links">
+          <!-- 나중에 실제 주소로 변경 -->
+          <a
+            href="https://github.com/gyu2301"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+
+          <!-- 이메일 주소를 본인 주소로 변경 -->
+          <a href="mailto:이메일주소를입력하세요">
+            Email
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 하단 -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <p>© 2026 Choi Gyuwon. All rights reserved.</p>
+      <a href="#home">맨 위로 ↑</a>
+    </div>
+  </footer>
+</body>
+</html>
