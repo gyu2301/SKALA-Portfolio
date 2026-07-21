@@ -69,7 +69,7 @@ window.projects = [
       "Regression"
     ],
 
-    thumbnail: "",
+    thumbnail: "assets/images/boston-housing-thumbnail.png",
 
     github: "",
     colab: "",
