@@ -100,8 +100,8 @@ textarea {
 
 .section-heading h2 {
   color: var(--navy-950);
-  font-size: clamp(2.3rem, 5vw, 4rem);
-  line-height: 1.1;
+  font-size: clamp(1.9rem, 3.8vw, 2.8rem);
+  line-height: 1.15;
 }
 
 .section-heading > p {
@@ -237,11 +237,11 @@ textarea {
 }
 
 .hero h1 {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   color: var(--white);
-  font-size: clamp(3rem, 7vw, 5.7rem);
+  font-size: clamp(2.4rem, 5.1vw, 3.8rem);
   font-weight: 800;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
   line-height: 1.08;
 }
 
@@ -631,9 +631,9 @@ textarea {
 
 .about-title h2 {
   color: var(--navy-950);
-  font-size: clamp(2.7rem, 5vw, 4.6rem);
-  letter-spacing: -0.04em;
-  line-height: 1.17;
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.18;
 }
 
 .about-content {
@@ -705,7 +705,7 @@ textarea {
 .contact-box h2 {
   margin-bottom: 16px;
   color: var(--white);
-  font-size: clamp(2.3rem, 5vw, 4rem);
+  font-size: clamp(1.9rem, 3.6vw, 2.8rem);
   line-height: 1.15;
 }
 
