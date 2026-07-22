@@ -71,9 +71,38 @@ if (selectedProject) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Colab 열기
+        Colab에서 실행하기
       </a>
     `
+    : "";
+
+  const sourceNote = selectedProject.links && selectedProject.links.length
+    ? `
+        <div class="project-source-note">
+          <div class="project-source-note-text">
+            <span class="project-source-note-icon">📄</span>
+            <p>아래 버튼은 프로젝트의 원문·보고서 PDF로 연결됩니다.</p>
+          </div>
+        </div>
+      `
+    : selectedProject.colab
+    ? `
+        <div class="project-source-note">
+          <div class="project-source-note-text">
+            <span class="project-source-note-icon">🧪</span>
+            <p>아래 버튼은 Colab 노트북으로 연결됩니다.</p>
+          </div>
+        </div>
+      `
+    : selectedProject.github
+    ? `
+        <div class="project-source-note">
+          <div class="project-source-note-text">
+            <span class="project-source-note-icon">🔗</span>
+            <p>아래 버튼은 GitHub에서 확인할 수 있는 코드로 연결됩니다.</p>
+          </div>
+        </div>
+      `
     : "";
 
   // 상세 페이지 전체 내용을 생성합니다.
@@ -101,11 +130,38 @@ if (selectedProject) {
         </div>
 
         ${
-          linkButtons || colabButton
+          sourceNote || linkButtons || colabButton
             ? `
-              <div class="project-detail-buttons">
-                ${linkButtons}
-                ${colabButton}
+              <div class="project-detail-actions">
+                ${
+                  sourceNote
+                    ? `
+                      <div class="project-source-note">
+                        <div class="project-source-note-text">
+                          <span class="project-source-note-icon">📄</span>
+                          <p>아래 버튼은 프로젝트의 원문·보고서 PDF로 연결됩니다.</p>
+                        </div>
+                        ${
+                          linkButtons || colabButton
+                            ? `
+                              <div class="project-detail-buttons">
+                                ${linkButtons}
+                                ${colabButton}
+                              </div>
+                            `
+                            : ""
+                        }
+                      </div>
+                    `
+                    : linkButtons || colabButton
+                    ? `
+                      <div class="project-detail-buttons">
+                        ${linkButtons}
+                        ${colabButton}
+                      </div>
+                    `
+                    : ""
+                }
               </div>
             `
             : ""

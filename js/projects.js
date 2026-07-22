@@ -81,8 +81,8 @@ window.projects = [
 
     thumbnail: "assets/images/boston-housing-thumbnail.png",
 
-    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/2. 최규원_P275_회귀분석.ipynb",
-    colab: "",
+    github: "",
+    colab: "https://colab.research.google.com/github/gyu2301/SKALA-Portfolio/blob/main/original-projects/2.%20최규원_P275_%ED%9A%8C%EA%B7%80%EB%B6%84%EC%84%9D.ipynb",
 
     overview: `
       Boston Housing 데이터셋을 바탕으로 주택가격 중앙값(medv)에 영향을 주는 요인을 탐색했습니다. 데이터 구조와 결측치, 이상치, 상관관계를 먼저 확인한 뒤, 찰스강 인접 여부가 주택가격에 유의미한 차이를 만드는지 검정하고 다중회귀분석으로 영향 요인을 파악했습니다.
@@ -126,8 +126,14 @@ window.projects = [
 
     thumbnail: "assets/images/Transformer-Architecture-thumbnail.png",
 
-    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/3. 최규원_P275_LLM과TransformerArchitecture.pdf",
+    github: "",
     colab: "",
+    links: [
+      {
+        label: "보고서 PDF 보기",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/3.%20최규원_P275_LLM과TransformerArchitecture.pdf"
+      }
+    ],
 
     overview: `
       김유정 단편 8편(97,708자, 1,271개 문자 어휘)을 문자 단위로 토큰화하여 Transformer 기반 미니 언어모델을 구현했습니다. Token Embedding과 Position Embedding, Multi-Head Self-Attention, Causal Mask, Residual Connection, MLP를 포함한 6개 Transformer Block 구조를 통해 다음 문자 예측 과정을 실습했습니다.

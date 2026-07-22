@@ -1022,11 +1022,60 @@ textarea {
   color: #dcf5ff;
 }
 
+.project-detail-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 38px;
+  align-items: flex-start;
+}
+
+.project-source-note {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(158, 231, 255, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: rgba(220, 245, 255, 0.84);
+  font-size: 0.84rem;
+  backdrop-filter: blur(6px);
+}
+
+.project-source-note-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.project-source-note-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(56, 189, 248, 0.14);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.project-source-note p {
+  margin: 0;
+  line-height: 1.45;
+}
+
 .project-detail-buttons {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
-  margin-top: 38px;
+  margin-top: 2px;
 }
 
 .detail-secondary-button {
@@ -1178,6 +1227,19 @@ textarea {
 
   .project-detail-description {
     font-size: 1rem;
+  }
+
+  .project-detail-actions {
+    margin-top: 30px;
+  }
+
+  .project-source-note {
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  .project-source-note-text {
+    width: 100%;
   }
 
   .project-detail-buttons {
