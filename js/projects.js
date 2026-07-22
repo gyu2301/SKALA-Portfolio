@@ -24,8 +24,18 @@ window.projects = [
     // 아직 이미지가 없다면 빈칸으로 두어도 됩니다.
     thumbnail: "",
 
-    // 나중에 실제 주소를 넣습니다.
-    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/1. 8반2조_최종응답원문.pdf","https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/1. 최규원_P275_Prompt_설계와_Context.pdf",
+    // 여러 파일을 보여주기 위한 링크 목록입니다.
+    links: [
+      {
+        label: "8반2조 최종응답원문",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/1.%208반2조_최종응답원문.pdf"
+      },
+      {
+        label: "Prompt 설계와 Context",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/1.%20최규원_P275_Prompt_설계와_Context.pdf"
+      }
+    ],
+    github: "",
     colab: "",
 
     // 상세 페이지에 표시할 내용입니다.

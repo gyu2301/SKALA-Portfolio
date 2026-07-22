@@ -33,18 +33,33 @@ if (selectedProject) {
     )
     .join("");
 
-  // GitHub 주소가 있을 때만 버튼을 만듭니다.
-  const githubButton = selectedProject.github
+  // 프로젝트 링크 목록이 있을 때는 버튼을 여러 개 만듭니다.
+  const linkButtons = selectedProject.links && selectedProject.links.length
+    ? selectedProject.links
+        .map(
+          (link) => `
+            <a
+              href="${link.url}"
+              class="button button-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ${link.label}
+            </a>
+          `
+        )
+        .join("")
+    : selectedProject.github
     ? `
-      <a
-        href="${selectedProject.github}"
-        class="button button-primary"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        GitHub 코드 보기
-      </a>
-    `
+        <a
+          href="${selectedProject.github}"
+          class="button button-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub 코드 보기
+        </a>
+      `
     : "";
 
   // Colab 주소가 있을 때만 버튼을 만듭니다.
