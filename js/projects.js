@@ -25,7 +25,7 @@ window.projects = [
     thumbnail: "",
 
     // 나중에 실제 주소를 넣습니다.
-    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/8반2조_최종응답원문.pdf","https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/최규원_P275_Prompt_설계와_Context.pdf",
+    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/1. 8반2조_최종응답원문.pdf","https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/1. 최규원_P275_Prompt_설계와_Context.pdf",
     colab: "",
 
     // 상세 페이지에 표시할 내용입니다.
@@ -71,7 +71,7 @@ window.projects = [
 
     thumbnail: "assets/images/boston-housing-thumbnail.png",
 
-    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/최규원_P275_회귀분석.ipynb",
+    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/2. 최규원_P275_회귀분석.ipynb",
     colab: "",
 
     overview: `
@@ -116,7 +116,7 @@ window.projects = [
 
     thumbnail: "assets/images/Transformer-Architecture-thumbnail.png",
 
-    github: "",
+    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/3. 최규원_P275_LLM과TransformerArchitecture.pdf",
     colab: "",
 
     overview: `
