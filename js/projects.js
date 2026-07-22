@@ -25,7 +25,7 @@ window.projects = [
     thumbnail: "",
 
     // 나중에 실제 주소를 넣습니다.
-    github: "",
+    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/8반2조_최종응답원문.pdf","https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/최규원_P275_Prompt_설계와_Context.pdf",
     colab: "",
 
     // 상세 페이지에 표시할 내용입니다.
@@ -71,7 +71,7 @@ window.projects = [
 
     thumbnail: "assets/images/boston-housing-thumbnail.png",
 
-    github: "",
+    github: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/최규원_P275_회귀분석.ipynb",
     colab: "",
 
     overview: `
@@ -91,6 +91,51 @@ window.projects = [
 
     learned: `
       가설검정과 회귀분석은 서로 다른 질문에 적합한 도구라는 점을 배웠습니다. 변수 선택과 해석의 중요성, 상관관계와 인과관계의 차이, 그리고 모델 평가 지표를 함께 보는 것이 분석 결과를 해석하는 데 필수적이라는 점도 익혔습니다.
+    `
+  },
+
+  {
+    id: "Transformer-Architecture",
+
+    title: "Transformer Architecture 미니 언어모델 구현",
+
+    category: "Machine Learning",
+
+    period: "2026.07",
+
+    description:
+      "김유정 단편 8편을 문자 단위로 학습한 Transformer 기반 미니 GPT 언어모델을 구현하고, 학습 손실과 생성 결과를 통해 Transformer의 문맥 이해 및 한계점을 분석한 프로젝트입니다.",
+
+    skills: [
+      "Python",
+      "PyTorch",
+      "Transformer Architecture",
+      "NLP",
+      "Language Modeling"
+    ],
+
+    thumbnail: "assets/images/Transformer-Architecture-thumbnail.png",
+
+    github: "",
+    colab: "",
+
+    overview: `
+      김유정 단편 8편(97,708자, 1,271개 문자 어휘)을 문자 단위로 토큰화하여 Transformer 기반 미니 언어모델을 구현했습니다. Token Embedding과 Position Embedding, Multi-Head Self-Attention, Causal Mask, Residual Connection, MLP를 포함한 6개 Transformer Block 구조를 통해 다음 문자 예측 과정을 실습했습니다.
+    `,
+
+    process: [
+      "문자 단위 토큰화를 수행하고 Token Embedding과 Position Embedding을 합산하여 입력 벡터를 구성했습니다.",
+      "Self-Attention의 Q/K/V, Causal Mask, Multi-Head Attention, Residual Connection, Feed-Forward MLP, Language Model Head를 구현하여 다음 문자 예측 모델을 설계했습니다.",
+      "Google Colab GPU에서 2,000회 학습을 진행하며 Training Loss 변화를 분석하고, 학습 전·후 생성 텍스트의 품질 차이를 비교했습니다.",
+      "temperature=1.0, top_k=10 샘플링으로 생성된 텍스트를 평가하여 모델이 학습한 문자 패턴과 한국어 문장 구조의 학습 수준을 확인했습니다."
+    ],
+
+    result: `
+      학습 초기에는 무작위 문자 조합이 대부분이었지만, 500회 이후에는 문장부호와 실제 단어가 나타나기 시작했고, 1,000회 이후에는 대화문과 서술문 형태가 더 분명해졌습니다. 최종 생성 문장은 한국어 문장 형태를 일부 재현했으나, 단어 결합과 의미 연결 측면에서는 여전히 한계가 있어, 모델이 문맥 패턴을 학습했지만 전체 의미 이해는 제한적임을 확인했습니다.
+    `,
+
+    learned: `
+      Transformer 기반 언어모델은 완성된 문장을 저장해두고 꺼내는 대신 현재 문맥을 바탕으로 다음 문자를 확률적으로 예측하며 텍스트를 생성한다는 점을 이해했습니다. 또한 Loss 감소가 곧 의미적 자연스러움이나 일반화 능력을 보장하지는 않으며, 미니 모델은 Transformer의 기본 원리를 실습하기에 적합하지만 실제 LLM의 대규모 파라미터와 데이터, 지시학습·정렬 과정을 대체할 수 없다는 한계도 확인했습니다.
     `
   }
 ];
