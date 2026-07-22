@@ -101,10 +101,10 @@ if (selectedProject) {
         </div>
 
         ${
-          githubButton || colabButton
+          linkButtons || colabButton
             ? `
               <div class="project-detail-buttons">
-                ${githubButton}
+                ${linkButtons}
                 ${colabButton}
               </div>
             `
