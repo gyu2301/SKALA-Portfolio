@@ -173,7 +173,11 @@ window.projects = [
       "JavaScript",
       "DOM",
       "CRUD",
-      "반응형 웹"
+      "반응형 웹",
+      "CSS Grid",
+      "이벤트 위임",
+      "폼 검증",
+      "상태 관리"
     ],
 
     thumbnail: "assets/images/car-crud-thumbnail.png",
