@@ -33,33 +33,32 @@ if (selectedProject) {
     )
     .join("");
 
-  // 프로젝트 링크 목록이 있을 때는 버튼을 여러 개 만듭니다.
-  const linkButtons = selectedProject.links && selectedProject.links.length
-    ? selectedProject.links
-        .map(
-          (link) => `
-            <a
-              href="${link.url}"
-              class="button button-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ${link.label}
-            </a>
-          `
-        )
-        .join("")
-    : selectedProject.github
+  // 데모 주소가 있을 때만 버튼을 만듭니다.
+  const demoButton = selectedProject.demo
     ? `
-        <a
-          href="${selectedProject.github}"
-          class="button button-primary"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub 코드 보기
-        </a>
-      `
+      <a
+        href="${selectedProject.demo}"
+        class="button button-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        라이브 데모 보기
+      </a>
+    `
+    : "";
+
+  // GitHub 주소가 있을 때만 버튼을 만듭니다.
+  const githubButton = selectedProject.github
+    ? `
+      <a
+        href="${selectedProject.github}"
+        class="button button-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GitHub 코드 보기
+      </a>
+    `
     : "";
 
   // Colab 주소가 있을 때만 버튼을 만듭니다.
@@ -71,38 +70,9 @@ if (selectedProject) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Colab에서 실행하기
+        Colab 열기
       </a>
     `
-    : "";
-
-  const sourceNote = selectedProject.links && selectedProject.links.length
-    ? `
-        <div class="project-source-note">
-          <div class="project-source-note-text">
-            <span class="project-source-note-icon">📄</span>
-            <p>아래 버튼은 프로젝트의 원문·보고서 PDF로 연결됩니다.</p>
-          </div>
-        </div>
-      `
-    : selectedProject.colab
-    ? `
-        <div class="project-source-note">
-          <div class="project-source-note-text">
-            <span class="project-source-note-icon">🧪</span>
-            <p>아래 버튼은 Colab 노트북으로 연결됩니다.</p>
-          </div>
-        </div>
-      `
-    : selectedProject.github
-    ? `
-        <div class="project-source-note">
-          <div class="project-source-note-text">
-            <span class="project-source-note-icon">🔗</span>
-            <p>아래 버튼은 GitHub에서 확인할 수 있는 코드로 연결됩니다.</p>
-          </div>
-        </div>
-      `
     : "";
 
   // 상세 페이지 전체 내용을 생성합니다.
@@ -130,38 +100,12 @@ if (selectedProject) {
         </div>
 
         ${
-          sourceNote || linkButtons || colabButton
+          demoButton || githubButton || colabButton
             ? `
-              <div class="project-detail-actions">
-                ${
-                  sourceNote
-                    ? `
-                      <div class="project-source-note">
-                        <div class="project-source-note-text">
-                          <span class="project-source-note-icon">📄</span>
-                          <p>아래 버튼은 프로젝트의 원문·보고서 PDF로 연결됩니다.</p>
-                        </div>
-                        ${
-                          linkButtons || colabButton
-                            ? `
-                              <div class="project-detail-buttons">
-                                ${linkButtons}
-                                ${colabButton}
-                              </div>
-                            `
-                            : ""
-                        }
-                      </div>
-                    `
-                    : linkButtons || colabButton
-                    ? `
-                      <div class="project-detail-buttons">
-                        ${linkButtons}
-                        ${colabButton}
-                      </div>
-                    `
-                    : ""
-                }
+              <div class="project-detail-buttons">
+                ${demoButton}
+                ${githubButton}
+                ${colabButton}
               </div>
             `
             : ""
