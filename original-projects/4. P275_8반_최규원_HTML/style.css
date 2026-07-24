@@ -51,7 +51,7 @@ body {
 
 .car-form {
   display: grid;
-  gap: 14px;
+  gap: 20px;
 }
 
 .form-row {
@@ -72,7 +72,9 @@ button {
 input,
 select {
   width: 100%;
-  padding: 11px 12px;
+  height: 46px;
+  padding: 0 14px;
+  font-size: 16px;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
 }
@@ -86,7 +88,6 @@ select:focus {
 .button-area {
   display: flex;
   gap: 8px;
-  margin-top: 8px;
 }
 
 button {
