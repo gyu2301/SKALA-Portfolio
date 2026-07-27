@@ -207,5 +207,62 @@ window.projects = [
     learned: `
       상태(state)를 배열로 관리하고 그 상태를 기준으로 화면을 다시 그리는 렌더링 패턴을 익혔습니다. 등록과 수정이 같은 폼과 검증 로직을 공유하도록 설계하면 코드 중복을 줄일 수 있다는 점과, data 속성과 이벤트 위임을 활용하면 동적으로 생성되는 카드의 버튼도 깔끔하게 제어할 수 있다는 점을 배웠습니다.
     `
+  },
+
+  {
+    id: "academic-management-system",
+
+    title: "학사관리시스템 설계 및 구현",
+
+    category: "Database",
+
+    period: "2026.07",
+
+    description:
+      "학과·교수·학생·과목·수강신청 개체를 아우르는 학사관리시스템의 ERD를 설계하고, PostgreSQL로 제약조건을 반영한 DDL 작성부터 데이터 입력, 다양한 SELECT 조회까지 구현한 프로젝트입니다.",
+
+    skills: [
+      "PostgreSQL",
+      "SQL",
+      "ERD 설계",
+      "DDL",
+      "제약조건 설계",
+      "JOIN",
+      "GROUP BY",
+      "CASE WHEN",
+      "COALESCE",
+      "날짜 함수"
+    ],
+
+    thumbnail: "",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "학사관리시스템 설계 및 구현 PDF",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/5.%20판교_08반_최규원.pdf"
+      }
+    ],
+
+    overview: `
+      대학의 학과, 교수, 학생, 과목, 수강신청 정보를 하나의 데이터베이스에서 통합 관리하는 학사관리시스템을 설계하고 구현한 프로젝트입니다. 각 엔터티 간 1:N, M:N 관계를 정의하고 PK·FK·CHECK·UNIQUE·DEFAULT 제약조건으로 데이터 무결성을 보장하는 ERD를 설계한 뒤, PostgreSQL에서 실제 DDL과 DML로 구현했습니다.
+    `,
+
+    process: [
+      "학과(department)·교수(professor)·학생(student)·과목(course)·수강신청(enrollment) 5개 엔터티의 요구사항을 정의하고, 학과-교수/학생 1:N, 교수-과목 1:N, 교수-학생(지도) 1:N, 학생-과목 M:N 관계를 반영한 ERD를 설계했습니다.",
+      "SERIAL 기본키, 외래키 참조, NOT NULL, CHECK(성별 M/F, 학점 1~3, 성적 등급), UNIQUE(학과명, 수강신청 중복 방지), DEFAULT(CURRENT_DATE) 등 제약조건을 포함한 CREATE TABLE DDL을 작성했습니다.",
+      "학과 10건, 교수·학생·과목 각 10건 이상, 수강신청 16건의 데이터를 INSERT하고, WHERE·ORDER BY를 활용한 기초 조회 쿼리를 실행했습니다.",
+      "COALESCE로 연락처 결측값을 대체 표시하고, CASE WHEN으로 성적을 등급 구간으로 변환했으며, AGE·DATE_PART 날짜 함수로 나이와 재학 연수를 계산했습니다.",
+      "학생-과목-교수-학과를 모두 연결하는 다중 JOIN 조회와, 과목별 수강 인원을 집계하는 GROUP BY 쿼리를 작성해 수강신청 교차 테이블을 검증했습니다."
+    ],
+
+    result: `
+      PostgreSQL 환경에서 5개 테이블 전체의 제약조건이 정상적으로 동작함을 확인했습니다(중복 학과명 방지, 중복 수강신청 방지, 성별·학점·성적 범위 제한 등). 다중 JOIN과 GROUP BY 집계를 통해 학생별 수강 내역과 과목별 수강 인원을 정확히 조회할 수 있었습니다.
+    `,
+
+    learned: `
+      관계형 데이터베이스에서 M:N 관계는 교차 테이블로 분해해야 한다는 원칙과, PK·FK·CHECK·UNIQUE·DEFAULT 같은 제약조건을 설계 단계에서부터 촘촘히 정의해야 데이터 무결성을 지킬 수 있다는 점을 배웠습니다. 또한 COALESCE, CASE WHEN, 날짜 함수, 다중 JOIN, GROUP BY 집계를 실제 데이터에 적용해보며 요구사항을 SQL로 옮기는 실무 감각을 길렀습니다.
+    `
   }
 ];

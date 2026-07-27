@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 변명 제조소</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>AI 변명 제조소</h1>
+      <p>상황 하나만 입력하면 5단계 변명과 성공 확률, 상대방의 예상 답변까지 만들어 드립니다.</p>
+    </header>
+
+    <main class="container">
+      <!-- 상황 입력 카드 -->
+      <section class="input-card">
+        <h2>상황 입력</h2>
+
+        <div class="input-row">
+          <label for="situationInput">무슨 일이 있었나요?</label>
+          <input
+            type="text"
+            id="situationInput"
+            placeholder="예: 과제를 제출하지 못했습니다"
+          >
+        </div>
+
+        <div class="example-chips">
+          <span>빠른 입력</span>
+          <button type="button" class="chip" data-example="과제를 제출하지 못했습니다">과제 미제출</button>
+          <button type="button" class="chip" data-example="회의에 지각했습니다">회의 지각</button>
+          <button type="button" class="chip" data-example="약속 시간에 늦었습니다">약속 펑크</button>
+          <button type="button" class="chip" data-example="실수로 메일을 잘못 보냈습니다">이메일 오발송</button>
+        </div>
+
+        <div class="input-row">
+          <label for="recipientSelect">누구에게 할 변명인가요?</label>
+          <select id="recipientSelect">
+            <option value="professor">교수님</option>
+            <option value="friend">친구</option>
+            <option value="boss">직장 상사</option>
+          </select>
+        </div>
+
+        <button type="button" id="generateButton" class="primary-button">
+          변명 5종 생성하기
+        </button>
+      </section>
+
+      <!-- 생성 결과 -->
+      <section id="resultsSection" class="results-section" hidden>
+        <div class="section-header">
+          <h2>생성된 변명</h2>
+          <p id="resultsSubtext"></p>
+        </div>
+
+        <div id="resultsGrid" class="results-grid"></div>
+      </section>
+
+      <!-- 변명 배틀 -->
+      <section id="battleSection" class="battle-section" hidden>
+        <div class="section-header">
+          <h2>변명 배틀</h2>
+          <p>둘 중 어떤 변명이 더 그럴듯한가요? 투표해서 최강 변명 유형을 가려보세요.</p>
+        </div>
+
+        <div id="battleArena" class="battle-arena"></div>
+
+        <button type="button" id="newBattleButton" class="secondary-button">
+          다른 대결 보기
+        </button>
+
+        <div class="scoreboard">
+          <h3>변명 유형별 승리 기록</h3>
+          <div id="scoreboardList" class="scoreboard-list"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
