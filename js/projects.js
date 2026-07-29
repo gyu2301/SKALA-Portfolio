@@ -234,7 +234,7 @@ window.projects = [
       "날짜 함수"
     ],
 
-    thumbnail: "",
+    thumbnail: "assets/images/스마트데이터_종합실습1ERP.png",
 
     github: "",
     colab: "",
@@ -263,6 +263,63 @@ window.projects = [
 
     learned: `
       관계형 데이터베이스에서 M:N 관계는 교차 테이블로 분해해야 한다는 원칙과, PK·FK·CHECK·UNIQUE·DEFAULT 같은 제약조건을 설계 단계에서부터 촘촘히 정의해야 데이터 무결성을 지킬 수 있다는 점을 배웠습니다. 또한 COALESCE, CASE WHEN, 날짜 함수, 다중 JOIN, GROUP BY 집계를 실제 데이터에 적용해보며 요구사항을 SQL로 옮기는 실무 감각을 길렀습니다.
+    `
+  },
+
+  {
+    id: "campushub-advanced-sql",
+
+    title: "CampusHub 고급 SQL 데이터 분석 실습",
+
+    category: "Database",
+
+    period: "2026.07",
+
+    description:
+      "종합실습1에서 설계한 CampusHub 학사관리 스키마와 사내 조직도 데이터를 바탕으로, 다중 JOIN·서브쿼리·집합연산·재귀 CTE·윈도우 함수 등 25개의 고급 SQL 문제를 pgAdmin 4에서 직접 풀어낸 실습 프로젝트입니다.",
+
+    skills: [
+      "PostgreSQL",
+      "서브쿼리",
+      "다중 JOIN",
+      "RECURSIVE CTE",
+      "윈도우 함수",
+      "ROLLUP",
+      "STRING_AGG",
+      "집합 연산",
+      "pgAdmin"
+    ],
+
+    thumbnail: "assets/images/스마트데이터_종합실습2.png",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "CampusHub 고급 SQL 실습 PDF",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/6.%20판교_08반_최규원_스마트데이터종합실습2.pdf"
+      }
+    ],
+
+    overview: `
+      종합실습1에서 구축한 CampusHub(학과·교수·학생·과목·수강신청) 스키마와 사내 조직도(emp-manager) 데이터를 바탕으로, INNER·OUTER·SELF·CROSS JOIN부터 상관 서브쿼리, 집합 연산, ROLLUP 집계, 재귀 CTE, 윈도우 함수까지 총 25개의 SQL 문제를 pgAdmin 4에서 직접 작성하고 결과를 검증한 실습 프로젝트입니다.
+    `,
+
+    process: [
+      "데이터 적재 스크립트에서 emp_id 12~311 구간의 manager_id가 잘못 매핑된 off-by-one 오류를 발견해 UPDATE로 수정하고, 매니저별 직속 인원 수를 재검증하는 것으로 실습을 시작했습니다.",
+      "INNER·LEFT·RIGHT·FULL OUTER JOIN, SELF JOIN, CROSS JOIN과 NOT EXISTS·EXISTS를 활용한 안티·세미 조인 패턴으로 학생·과목·조직 데이터를 다각도로 조회했습니다.",
+      "COALESCE, TO_CHAR 통화 포맷팅, STRING_AGG로 학생별 수강 과목 목록을 집계하고, ROW_NUMBER()로 5개 과목을 매니저에게 순환 배정하는 course_owner 매핑 테이블을 새로 만들었습니다.",
+      "스칼라·비상관·상관 서브쿼리와 WITH CTE, UNION ALL 집합 연산, ROLLUP과 GROUPING을 이용한 전공·GPA 구간별 소계·총계 리포트를 작성했습니다.",
+      "WITH RECURSIVE로 매니저-부하 조직도를 depth·path까지 계산하는 재귀 트리 쿼리를 구현하고, ROW_NUMBER·RANK·DENSE_RANK·COUNT OVER(PARTITION BY)로 그룹별 Top-N을 서브쿼리 방식과 CTE 방식 두 가지로 각각 구현했습니다.",
+      "LAG() 윈도우 함수로 학생별 성적 등급(A~D)을 점수화해 추세를 분석하고, 이동합계·이동평균과 누적 비율을 SUM()·AVG() OVER(ROWS BETWEEN ... PRECEDING)로 계산하며 실습을 마무리했습니다."
+    ],
+
+    result: `
+      pgAdmin 4에서 총 25개 문항의 쿼리를 모두 실행해 의도한 결과를 확인했습니다. 매니저 11명의 조직 트리가 최대 depth 10까지 재귀적으로 조회되었고, GPA 구간(3.0 미만·3.0~3.5·3.5 초과)별 전공 소계와 전체 총계가 ROLLUP으로 정확히 집계되었으며, 학생별 성적 추세와 누적 비율까지 윈도우 함수로 검증했습니다.
+    `,
+
+    learned: `
+      단순 JOIN만으로는 풀리지 않는 문제일수록 상관 서브쿼리, 재귀 CTE, 윈도우 함수 같은 고급 기법이 필요하다는 점과, 같은 Top-N 문제도 서브쿼리 방식과 CTE 방식으로 다르게 풀어보며 가독성과 성능 측면의 장단점을 비교할 수 있었습니다. 또한 데이터 적재 단계의 사소한 오류(off-by-one)가 이후 모든 집계 결과를 왜곡시킬 수 있다는 것을 확인하며, 분석 전 데이터 검증의 중요성을 체감했습니다.
     `
   }
 ];
