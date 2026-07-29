@@ -234,7 +234,7 @@ window.projects = [
       "날짜 함수"
     ],
 
-    thumbnail: "assets/images/스마트데이터_종합실습1ERP.png",
+    thumbnail: "assets/images/스마트데이터_종합실습1ERP.png",
 
     github: "",
     colab: "",
@@ -290,7 +290,7 @@ window.projects = [
       "pgAdmin"
     ],
 
-    thumbnail: "assets/images/스마트데이터_종합실습2.png",
+    thumbnail: "assets/images/스마트데이터_종합실습2.png",
 
     github: "",
     colab: "",
