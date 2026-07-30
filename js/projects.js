@@ -321,5 +321,61 @@ window.projects = [
     learned: `
       단순 JOIN만으로는 풀리지 않는 문제일수록 상관 서브쿼리, 재귀 CTE, 윈도우 함수 같은 고급 기법이 필요하다는 점과, 같은 Top-N 문제도 서브쿼리 방식과 CTE 방식으로 다르게 풀어보며 가독성과 성능 측면의 장단점을 비교할 수 있었습니다. 또한 데이터 적재 단계의 사소한 오류(off-by-one)가 이후 모든 집계 결과를 왜곡시킬 수 있다는 것을 확인하며, 분석 전 데이터 검증의 중요성을 체감했습니다.
     `
+  },
+
+  {
+    id: "hr-slow-query-tuning",
+
+    title: "HR DB 느린 쿼리 최적화 - EXPLAIN Before/After 비교",
+
+    category: "Database",
+
+    period: "2026.07",
+
+    description:
+      "직원 5만 명 규모 HR DB에서 느려진 검색·조회 쿼리를 EXPLAIN (ANALYZE, BUFFERS)로 진단하고, 함수 기반 인덱스·부분 인덱스·복합 인덱스·쿼리 재작성으로 튜닝한 뒤 Before/After 실행계획을 비교 분석한 프로젝트입니다.",
+
+    skills: [
+      "PostgreSQL",
+      "EXPLAIN ANALYZE",
+      "쿼리 튜닝",
+      "함수 기반 인덱스",
+      "부분 인덱스",
+      "복합 인덱스",
+      "Index Only Scan",
+      "SARGable",
+      "실행계획 분석"
+    ],
+
+    thumbnail: "assets/images/스마트데이터_종합실습3.png",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "HR DB 느린 쿼리 최적화 PDF",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/7.%ED%8C%90%EA%B5%90_08%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90_%EC%8A%A4%EB%A7%88%ED%8A%B8%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%A2%85%ED%95%A9%EC%8B%A4%EC%8A%B53.pdf"
+      }
+    ],
+
+    overview: `
+      직원 수가 5만 명 이상으로 늘면서 검색 속도가 느려지고 보고서 생성이 지연되는 인사 관리 시스템을 가정하고, 이메일 검색·LIKE 접미사 검색·정렬+필터 결합 쿼리·OR 조건 쿼리 총 4가지 유형의 느린 쿼리를 각각 EXPLAIN (ANALYZE, BUFFERS)로 진단한 뒤 인덱스 설계와 쿼리 재작성으로 튜닝하고, Before/After 실행계획과 버퍼·실행시간 지표를 비교한 실습 프로젝트입니다.
+    `,
+
+    process: [
+      "lower(email)·upper(email) 함수 적용, ILIKE 비교가 각각 왜 인덱스를 타지 못하고 Seq Scan으로 5만 행을 전수 비교하는지 실행계획으로 확인한 뒤, 함수 기반 인덱스(idx_employees_lower_email)와 컬럼 자체가 이미 소문자임을 활용한 함수 제거(sargable 재작성), INCLUDE 커버링 인덱스로 Index Only Scan까지 단계적으로 튜닝했습니다.",
+      "'%gmail.com'처럼 선행 와일드카드가 붙은 LIKE, right(), split_part() 접미사 추출 쿼리를 비교하고, reverse() 함수 인덱스+text_pattern_ops, right() 함수 인덱스, split_part() 함수 인덱스 세 방식의 재사용성·인덱스 크기·성능 트레이드오프를 분석했습니다.",
+      "최근 365일 입사·재직중 조건으로 급여 상위 100명을 조회하는 쿼리에서 병목이 검색이 아닌 Sort(top-N heapsort/external merge)에 있음을 확인하고, 등호 조건을 앞에 둔 복합 인덱스, status='ACTIVE' 부분 인덱스+salary DESC 정렬 인덱스로 Sort 노드를 제거했으며, WITH ... AS MATERIALIZED로 100건을 먼저 추린 뒤 조인하도록 쿼리 구조를 재작성했습니다.",
+      "department_id=10 OR job_id IN (3,4,5) 조건에서 OR 나열·암묵적 타입 캐스팅(::text)이 인덱스를 어떻게 무력화하는지 확인하고, 컬럼별 인덱스+BitmapOr, UNION/UNION ALL 재작성 시 중복 집계 오류를 검증했으며, 캐스팅 제거와 INCLUDE 커버링 인덱스로 Index Only Scan을 유도했습니다.",
+      "각 쿼리의 Before/After EXPLAIN 결과에서 Execution Time, Buffers, Heap Blocks, Rows Removed by Filter, Sort Method를 표로 정리해, 실행시간 단축과 버퍼 증감이 항상 비례하지 않는 이유를 블록당 행 밀도(약 63행/블록)와 선택도 관점에서 분석했습니다."
+    ],
+
+    result: `
+      이메일 등호 검색은 조건을 인덱스와 일치시켜 29.6~320배, 정렬+LIMIT 조기 종료는 103.5배, 조인 전 100건 축소는 40.5배 빨라졌습니다. 반면 LIKE 접미사 검색과 OR 조건 튜닝은 실행 시간은 단축되었지만 대상 행이 여러 블록에 흩어져 있어 Buffers가 오히려 1~8% 증가하는 경우도 확인했으며, 이를 통해 인덱스 튜닝의 효과가 I/O 감소가 아니라 행별 함수·형변환 연산의 CPU 비용 감소에서 온 사례와 실제로 스캔 범위(Heap Blocks)가 줄어든 사례를 구분해 분석했습니다.
+    `,
+
+    learned: `
+      좋은 쿼리 튜닝은 인덱스를 많이 추가하는 것이 아니라, 컬럼에 함수·형변환을 적용하지 않는 SARGable한 조건으로 작성하고 선택도가 높은 등호 조건을 복합 인덱스 앞쪽에 배치하며, 부분 인덱스·LIMIT 조기 종료·조인 전 필터로 처리해야 할 행 수 자체를 줄이는 것임을 배웠습니다. 또한 Buffers 지표가 항상 튜닝 효과와 비례하지 않으며, 조건값의 선택도가 낮으면 인덱스를 추가해도 읽어야 할 Heap Block 수는 줄지 않을 수 있어 Execution Time·Buffers·Heap Blocks·Rows Removed·Sort Method를 함께 비교해야 진짜 개선 원인(I/O 감소 vs CPU 연산 감소)을 판단할 수 있다는 점을 확인했습니다.
+    `
   }
 ];
