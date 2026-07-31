@@ -377,5 +377,64 @@ window.projects = [
     learned: `
       좋은 쿼리 튜닝은 인덱스를 많이 추가하는 것이 아니라, 컬럼에 함수·형변환을 적용하지 않는 SARGable한 조건으로 작성하고 선택도가 높은 등호 조건을 복합 인덱스 앞쪽에 배치하며, 부분 인덱스·LIMIT 조기 종료·조인 전 필터로 처리해야 할 행 수 자체를 줄이는 것임을 배웠습니다. 또한 Buffers 지표가 항상 튜닝 효과와 비례하지 않으며, 조건값의 선택도가 낮으면 인덱스를 추가해도 읽어야 할 Heap Block 수는 줄지 않을 수 있어 Execution Time·Buffers·Heap Blocks·Rows Removed·Sort Method를 함께 비교해야 진짜 개선 원인(I/O 감소 vs CPU 연산 감소)을 판단할 수 있다는 점을 확인했습니다.
     `
+  },
+
+  {
+    id: "ecommerce-sales-analysis",
+
+    title: "E-Commerce 매출 분석 및 쿼리 성능 개선",
+
+    category: "Database",
+
+    period: "2026.07",
+
+    description:
+      "PostgreSQL 기반 이커머스 스키마에서 실매출·카테고리·RFM·재구매율 등 11개 분석 쿼리를 작성하고, EXPLAIN (ANALYZE, BUFFERS)로 병목을 진단해 재작성 및 인덱스로 튜닝한 뒤 Materialized View로 일별 매출 리포트를 개선한 프로젝트입니다.",
+
+    skills: [
+      "PostgreSQL",
+      "매출 데이터 분석",
+      "RECURSIVE CTE",
+      "RFM 분석",
+      "WINDOW FUNCTION",
+      "안전한 나눗셈 함수",
+      "EXPLAIN ANALYZE",
+      "쿼리 튜닝",
+      "Materialized View",
+      "pg_cron",
+      "Join 전략 분석"
+    ],
+
+    thumbnail: "assets/images/스마트데이터_종합실습4.png",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "E-Commerce 매출 분석 PDF",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/8.%ED%8C%90%EA%B5%90_08%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90_%EC%8A%A4%EB%A7%88%ED%8A%B8%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%A2%85%ED%95%A9%EC%8B%A4%EC%8A%B54.pdf"
+      }
+    ],
+
+    overview: `
+      결제 전 상태와 취소·환불 주문을 제외하고 qty * unit_price - discount로 계산한 실매출을 기준으로, 최근 1개월 매출, 월별 주문수·AOV, 카테고리 Top10, 제품 누적매출 랭킹, 고객 RFM, 재구매율, 재고 임계치, 리뷰 우수상품, 쿠폰 효과, 상위 1% 고객 매출까지 총 11개 분석 쿼리를 작성한 PostgreSQL 기반 이커머스 매출 분석 프로젝트입니다. 이후 EXPLAIN (ANALYZE, BUFFERS)로 각 쿼리의 실행계획을 비교해 병목 쿼리를 재작성·인덱싱하고, 반복 조회되는 일별 매출 리포트는 Materialized View로 사전 계산해 조회 성능을 개선했습니다.
+    `,
+
+    process: [
+      "현재시각과 유효 주문 최대시각 중 이른 값을 분석 기준시점으로 정의해, 시드 데이터의 미래 시각 문제와 과거 조회 시 기간이 비는 문제를 함께 방지하고 (기준시점-기간, 기준시점] 형태로 모든 기간 조건을 통일했습니다.",
+      "재귀 CTE로 카테고리 트리의 전체 경로를 만들어 리프 카테고리 기준 최근 90일 매출 Top10을 뽑고, RANK() 윈도우 함수로 제품별 누적매출 Top20(동률 포함)을 산출했으며, RFM(Recency·Frequency·Monetary)과 첫 구매 후 30일 재구매율을 관찰기간이 확보된 고객만 분모로 삼아 계산했습니다.",
+      "재고 임계치 미달 상품, HAVING 절 기반 리뷰 4.5점·50건 이상 효자상품, 쿠폰 사용/미사용 그룹별 평균 주문금액, ROW_NUMBER와 CEIL(고객수*1%)로 선정한 상위 1% 고객의 최근 60일 매출을 조회하고, 0 나눗셈 시 NULL을 반환하는 ecom.safe_divide() 함수를 만들어 안전한 AOV 계산에 적용했습니다.",
+      "11개 쿼리에 EXPLAIN (ANALYZE, BUFFERS)를 적용해 실행시간·버퍼·스캔 방식을 비교하고, 고객별로 반복 실행되던 Q6의 EXISTS 서브쿼리를 부분 인덱스+윈도우 함수+BOOL_OR 구조로, order_items를 반복 조회하던 Q3을 MATERIALIZED CTE와 커버링 인덱스로 재작성해 각각 189.757ms→8.909ms, 15.434ms→12.879ms로 단축했습니다.",
+      "Hash Join·Nested Loop·Bitmap Heap Scan의 동작 원리와 적합한 상황을 비교 분석하고, 반복되는 대규모 조인·집계 비용을 줄이기 위해 결제완료 이상 주문의 일별 매출을 미리 계산하는 mv_daily_gmv Materialized View를 설계했습니다.",
+      "day 컬럼에 고유 인덱스를 만들어 CONCURRENTLY 갱신 중에도 조회가 막히지 않도록 하고, 매일 오후 3시 REFRESH MATERIALIZED VIEW CONCURRENTLY를 pg_cron으로 예약하는 운영 절차를 설계했으며, PostgreSQL·MySQL·Oracle·SQL Server의 옵티마이저·조인 전략·사전 계산 기능 차이를 비교 정리했습니다."
+    ],
+
+    result: `
+      11개 분석 쿼리 모두 의도한 결과를 반환했으며, EXPLAIN 분석으로 실행시간·Shared Hit·Shared Read를 표로 정리해 Q6(재구매율)은 실행시간 95% 이상, Q3(카테고리 Top10)은 버퍼 사용량이 크게 감소했음을 확인했습니다. mv_daily_gmv Materialized View 적용 후에는 원본 테이블을 다시 JOIN·SUM하지 않고 저장된 day·gmv만 읽어 일별 매출 리포트를 즉시 조회할 수 있었습니다.
+    `,
+
+    learned: `
+      실매출 정의(주문 상태·할인 반영)와 분석 기준시점을 프로젝트 초반에 명확히 고정해야 이후 모든 쿼리의 기간 조건과 집계 결과가 일관된다는 점을 배웠습니다. 또한 Hash Join과 Nested Loop 중 무엇이 항상 우수한 것은 아니며, 동일한 복합 조인이 반복 조회되는 업무에서는 매번 원본을 조인하기보다 Materialized View 같은 사전 계산 구조로 조인·집계 비용 자체를 없애는 것이 더 효과적인 성능 개선 방향이라는 것을 확인했습니다.
+    `
   }
 ];
