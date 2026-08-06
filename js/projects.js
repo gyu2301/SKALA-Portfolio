@@ -436,5 +436,113 @@ window.projects = [
     learned: `
       실매출 정의(주문 상태·할인 반영)와 분석 기준시점을 프로젝트 초반에 명확히 고정해야 이후 모든 쿼리의 기간 조건과 집계 결과가 일관된다는 점을 배웠습니다. 또한 Hash Join과 Nested Loop 중 무엇이 항상 우수한 것은 아니며, 동일한 복합 조인이 반복 조회되는 업무에서는 매번 원본을 조인하기보다 Materialized View 같은 사전 계산 구조로 조인·집계 비용 자체를 없애는 것이 더 효과적인 성능 개선 방향이라는 것을 확인했습니다.
     `
+  },
+
+  {
+    id: "vue-weather-dashboard",
+
+    title: "Vue 3 날씨 대시보드",
+
+    category: "Frontend Development",
+
+    period: "2026.08",
+
+    description:
+      "Vue 3 Composition API와 Pinia, Vue Router, Element Plus로 구현한 실시간 날씨 대시보드로, OpenWeatherMap API 연동과 도시 검색·추가·삭제, 실시간 바람 지구본, 대기질·도시 정보 카드, 시간대별 옷차림 추천까지 제공하는 프로젝트입니다.",
+
+    skills: [
+      "Vue 3",
+      "Composition API",
+      "Vue Router",
+      "Pinia",
+      "Element Plus",
+      "Axios",
+      "OpenWeatherMap API",
+      "Vite",
+      "REST API 연동"
+    ],
+
+    thumbnail: "assets/images/Vue_js_WeatherApp.png",
+
+    demo: "https://skala-vue-jsweather-viewer.vercel.app",
+    github: "https://github.com/gyu2301/SKALA-Vue_js/tree/master/skala-vue",
+    colab: "",
+
+    overview: `
+      Vue 3 Composition API와 Vite, Element Plus로 구현한 날씨 대시보드입니다. OpenWeatherMap API로 여러 도시의 실시간 날씨를 조회하고, 도시 검색·추가·삭제, 섭씨/화씨 단위 전환, 실시간 바람 지구본과 24시간 기온·강수확률 차트, 대기질·도시 정보 카드, 시간대별 옷차림 추천까지 하나의 서비스 안에서 제공하도록 구성했습니다.
+    `,
+
+    process: [
+      "Pinia weatherStore에서 여러 도시의 날씨를 Promise.all로 병렬 호출해 대시보드 카드로 렌더링하고, isLoading·errorMessage 상태로 로딩과 401/429 등 API 오류 상황을 구분해 처리했습니다.",
+      "OpenWeatherMap Geocoding API가 부분 일치 검색을 지원하지 않는 한계를, 자체 CITY_DIRECTORY 사전 매칭 후 없으면 Geocoding으로 폴백하는 2단계 검색으로 해결하고, 한글 IME 조합 중 Enter 중복 emit으로 카드가 두 번 추가되던 버그를 event.isComposing 가드와 진행 중인 검색 Promise 재사용으로 해결했습니다.",
+      "ElInput·ElCard·ElAlert·ElTag·ElProgress 등 Element Plus 컴포넌트로 검색·피드백·상태 표시 UI를 통일하고, earth.nullschool.net의 실시간 바람 지도를 iframe으로 연결한 EarthWindGlobe를 추가했습니다. 다른 도메인 iframe이라 휠·핀치로 확대가 되지 않는 제약을, orthographic scale 파라미터를 버튼으로 바꿔 iframe을 다시 로드하는 방식으로 해결했습니다.",
+      "useAirQuality·useCityInsights composable로 날씨 데이터에 대기질 등급과 현지 시각·위키 요약을 합성해 AirQualityCard·CityInsightCard로 노출하고, WeatherCard와 동일한 el-card 톤을 재사용해 대시보드 전체의 시각적 통일감을 유지했습니다.",
+      "브라우저 geolocation으로 현재 위치 날씨를 우선 조회하고 권한 거부·실패 시 서울로 폴백하는 Today's Brief와, 날씨·기온·습도 조건에 따라 아침·점심·오후·저녁 시간대별 옷차림·우산·수분 섭취를 추천하는 로직을 구현했습니다.",
+      "도시 카드에 삭제 버튼을 추가하고, 새로고침 후에도 검색어와 검색 결과가 유지되도록 상태를 sessionStorage에 저장했으며, ESLint 통과와 `.env` API 키 분리를 확인한 뒤 Vercel에 정적 배포했습니다."
+    ],
+
+    result: `
+      실시간 바람 지구본이 드래그 회전·버튼 확대/축소로 정상 동작하고, 대기질·도시 정보 카드와 시간대별 옷차림 추천이 선택한 도시에 맞게 표시되는 것을 확인했습니다. 도시 삭제 버튼과 새로고침 후 검색 상태 유지, '코펜'·'프랑크' 같은 부분 검색어로 원하는 도시를 정확히 찾아 추가하는 기능, 동일 검색어 연속 입력 시 카드가 한 번만 추가되는 것도 함께 검증했습니다.
+    `,
+
+    learned: `
+      검색 결과(미리보기)와 확정된 목록을 별도 상태로 분리하면 '검색 후 확인하고 추가'하는 UX를 자연스럽게 구현할 수 있다는 점과, 겉보기에 단순한 버그(카드 중복 추가)도 IME 이벤트·비동기 경쟁 상태·중복 판단 기준이 겹쳐 발생할 수 있어 원인을 하나씩 분리해 검증하는 디버깅이 중요하다는 것을 배웠습니다. 또한 다른 도메인의 iframe은 부모 문서로 휠·터치 이벤트를 전달하지 않는다는 제약을 URL 파라미터 재로드로 우회하고, 카드형 컴포넌트마다 같은 Element Plus 톤을 재사용하면 기능이 늘어나도 UI 일관성을 유지할 수 있다는 점을 실감했습니다.
+    `
+  },
+
+  {
+    id: "vue-code-challenge",
+
+    title: "Vue.js Code Challenge 대쉬보드",
+
+    category: "Frontend Development",
+
+    period: "2026.08",
+
+    description:
+      "Vue 기본 문법부터 Directive, Event Handling, Composition API, Component 통신, Pinia, Axios API, Element Plus, Modern JavaScript, Vite 빌드·배포까지 14개 Challenge를 대시보드 형태로 구현하고 학습 진행 상태를 관리한 프로젝트입니다.",
+
+    skills: [
+      "Vue 3",
+      "Composition API",
+      "Vue Directives",
+      "Event Handling",
+      "v-model",
+      "Props & Emits",
+      "Slot",
+      "Lifecycle Hooks",
+      "Pinia",
+      "Axios",
+      "Element Plus",
+      "ES6+",
+      "Vite"
+    ],
+
+    thumbnail: "assets/images/Vue_js_CodeChallenge.png",
+
+    demo: "https://skala-vue-jscode-challenge.vercel.app",
+    github: "https://github.com/gyu2301/SKALA-Vue_js/tree/master/code-challenge",
+    colab: "",
+
+    overview: `
+      Vue 기본 문법부터 Composition API, Component 통신, Pinia, Axios API, Element Plus, Modern JavaScript, Vite 빌드·배포까지 14개 Challenge를 하나의 대시보드 안에서 확인할 수 있도록 구현한 프로젝트입니다. 사이드 네비게이션에서 Challenge를 선택해 예제 컴포넌트를 바로 렌더링하고 확인 여부를 체크해 학습 진행률을 관리하며, 별도로 배포한 Weather Dashboard 프로젝트와 서로 링크로 연결했습니다.
+    `,
+
+    process: [
+      "v-html·v-text, v-bind 축약형, v-if·v-show, v-for, v-once·v-memo, v-pre·v-cloak 등 Vue Directive 예제와 v-html의 XSS 위험을 보여주는 VueHtmlXss 컴포넌트를 구현해 Directive별 동작 차이를 비교했습니다.",
+      "이벤트 객체·수정자(Modifier)를 다루는 Event Handling 예제와 v-model 기본·폼·수정자 예제를 구현하고, Reactive State(ref·reactive)부터 computed와 6가지 watch 패턴(기본·다중·deep·reactive·watchEffect)까지 Composition API 예제를 단계별로 구성했습니다.",
+      "LifecycleParent·PropsEmitsParent로 컴포넌트 생명주기 Hook과 부모-자식 props·emit 통신을 구현하고, Default·Named·Scoped 3가지 Slot 패턴을 각각 부모-자식 컴포넌트 쌍으로 구현했습니다.",
+      "Pinia StoreCounter로 전역 상태 관리를 실습하고, Axios로 날씨 API 조회(AxiosWeather)·JSON REST CRUD(AxiosJson)에 이어 공개 API(dummyjson.com) 상품 목록을 조회하는 AxiosProducts와 cart 스토어까지 구현해 이커머스 예제로 확장했습니다.",
+      "ElInput·ElCard·ElAlert·ElTag 등 Element Plus 컴포넌트로 상품 목록 UI를 구성한 UI 라이브러리 챌린지를 추가하고, useProducts composable을 AxiosProducts와 공유해 동일한 데이터 조회 로직을 재사용했습니다. 이어서 구조분해·스프레드·옵셔널 체이닝 등 ES6+ 패턴을 다루는 Modern JavaScript 챌린지를 구성했습니다.",
+      "ESLint 커스텀 규칙(eqeqeq·no-console)과 `.env.staging`/`.env.production` 환경별 빌드를 다루는 Vite 빌드 챌린지를 14번으로 추가하고, Pinia useLearningStore로 14개 Challenge의 확인 여부와 진행률(progressRate)을 전역 관리해 사이드 네비게이션과 진행률 바에 실시간 반영되도록 구성했습니다."
+    ],
+
+    result: `
+      14개 Challenge 모두 사이드 네비게이션에서 전환하며 정상 동작을 확인했고, '확인 완료' 체크와 '확인 상태 초기화' 기능을 통해 학습 진행률(0~100%)이 정확히 계산되는 것을 검증했습니다. Axios Products 예제에서는 실제 공개 API에서 상품 목록을 조회해 화면에 표시했고, Vite 빌드 챌린지에서는 staging/production 모드에 따라 서로 다른 API URL이 정상적으로 노출되는 것을 확인했습니다.
+    `,
+
+    learned: `
+      Directive마다 렌더링 시점과 반응성 처리 방식(v-once의 1회 렌더링, v-memo의 조건부 캐싱, v-html의 XSS 위험 등)이 다르다는 점과, Composition API에서 watch 방식(단일·다중·deep·watchEffect)을 상황에 맞게 선택하는 기준을 익혔습니다. 또한 같은 API 호출 로직을 composable로 분리해 여러 Challenge 컴포넌트가 공유하면 중복 코드 없이 일관된 데이터를 보여줄 수 있다는 점과, ESLint 커스텀 규칙·환경별 env 파일 분리가 실무 배포 파이프라인에서 왜 필요한지를 Vite 빌드 챌린지를 통해 체감했습니다.
+    `
   }
 ];
