@@ -544,5 +544,170 @@ window.projects = [
     learned: `
       Directive마다 렌더링 시점과 반응성 처리 방식(v-once의 1회 렌더링, v-memo의 조건부 캐싱, v-html의 XSS 위험 등)이 다르다는 점과, Composition API에서 watch 방식(단일·다중·deep·watchEffect)을 상황에 맞게 선택하는 기준을 익혔습니다. 또한 같은 API 호출 로직을 composable로 분리해 여러 Challenge 컴포넌트가 공유하면 중복 코드 없이 일관된 데이터를 보여줄 수 있다는 점과, ESLint 커스텀 규칙·환경별 env 파일 분리가 실무 배포 파이프라인에서 왜 필요한지를 Vite 빌드 챌린지를 통해 체감했습니다.
     `
+  },
+
+  {
+    id: "python-comprehension-aggregation",
+
+    title: "Python 심화 데이터 집계 실습",
+
+    category: "Python",
+
+    period: "2026.08",
+
+    description:
+      "매출 데이터를 리스트/딕셔너리 컴프리헨션, Counter, defaultdict, 제너레이터로 다각도로 집계하고, 리스트와 제너레이터의 메모리 사용량 차이까지 비교한 Python 심화 실습입니다.",
+
+    skills: [
+      "Python",
+      "List/Dict Comprehension",
+      "Counter",
+      "defaultdict",
+      "Generator",
+      "메모리 최적화"
+    ],
+
+    thumbnail: "assets/images/11.파이썬practice1.png",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "Practice 1 소스코드 보기",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/11.%28Practice1%EC%8B%AC%ED%99%94%EC%8B%A4%EC%8A%B5%29%ED%8C%90%EA%B5%90_8%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90.py"
+      }
+    ],
+
+    overview: `
+      Sales 거래 데이터(월·지역·카테고리·금액)를 리스트/딕셔너리 컴프리헨션과 Counter, defaultdict, 제너레이터로 다각도로 집계하는 Python 심화 실습입니다. 고액 거래 필터링과 지역별 총매출, 지역별 거래 건수, 카테고리별 금액 리스트, 월·카테고리별 그룹 집계, 금액 상위 3건 랭킹까지 하나의 스크립트에서 단계별로 구현했습니다.
+    `,
+
+    process: [
+      "amount가 기준값 이상인 거래를 리스트 컴프리헨션으로 걸러내고, set 컴프리헨션으로 만든 고유 지역 집합을 기준으로 지역별 총매출을 딕셔너리 컴프리헨션으로 계산했습니다.",
+      "Counter로 지역별 거래 건수를 빈도순으로 집계하고, defaultdict(list)로 카테고리별 금액을 자동 초기화된 리스트에 누적해 별도 방어 코드 없이 그룹핑했습니다.",
+      "필요할 때 값을 하나씩만 만드는 제너레이터와 리스트 컴프리헨션의 객체 크기(sys.getsizeof)를 비교해 메모리 사용량 차이를 검증하고, 제너레이터는 한 번 소비하면 되감을 수 없는 일회성 객체라는 점을 재사용 없는 별도 생성으로 확인했습니다.",
+      "(month, category) 튜플을 키로 하는 defaultdict(float)에 금액을 누적한 뒤, 컴프리헨션으로 'YYYY-MM_카테고리' 형태의 읽기 쉬운 키로 재구성해 월별·카테고리별 총매출을 정리했습니다."
+    ],
+
+    result: `
+      고액 거래 필터링, Counter/defaultdict 집계, 제너레이터 메모리 비교, 월·카테고리 그룹핑, 금액 top3 랭킹까지 5개 과제 모두 assert로 결과를 검증하며 정상 동작을 확인했고, 지역별 총매출 합계가 전체 매출 합과 일치하는 것도 함께 검증했습니다.
+    `,
+
+    learned: `
+      컴프리헨션은 짧고 선언적이지만 조건이 복잡해질수록 가독성이 떨어질 수 있어 상황에 맞게 일반 반복문과 구분해 써야 한다는 점, defaultdict가 'key 존재 확인' 방어 코드를 없애준다는 점, 그리고 제너레이터는 메모리 효율은 좋지만 일회성 소비라는 제약이 있어 재사용이 필요하면 매번 새로 생성해야 한다는 점을 실습을 통해 체감했습니다.
+    `
+  },
+
+  {
+    id: "python-pydantic-validation-pipeline",
+
+    title: "파일 I/O 예외 처리 & Pydantic 검증 파이프라인",
+
+    category: "Python",
+
+    period: "2026.08",
+
+    description:
+      "CSV를 안전하게 읽고 Pydantic v2 스키마로 검증해 valid/error를 분리한 뒤 CSV·JSON으로 저장하고 재로딩까지 확인하는, try/except/else/finally와 로깅을 활용한 파일 I/O·예외 처리 실습입니다.",
+
+    skills: [
+      "Python",
+      "Pydantic",
+      "예외 처리",
+      "CSV/JSON I/O",
+      "Logging",
+      "데이터 검증"
+    ],
+
+    thumbnail: "assets/images/12.파이썬practice2.png",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "Practice 2 소스코드 보기",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/12.%28Practice2%29%ED%8C%90%EA%B5%90_8%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90.py"
+      }
+    ],
+
+    overview: `
+      CSV 파일을 안전하게 읽고 Pydantic v2 스키마(SalesRecord)로 검증해 valid/error를 분리한 뒤, 결과를 CSV·JSON으로 저장하고 다시 읽어 건수를 확인하는 파일 I/O·예외 처리 파이프라인입니다. try/except/else/finally 구조와 로깅을 함께 적용해 실패 지점을 추적할 수 있도록 구현했습니다.
+    `,
+
+    process: [
+      "month·region은 빈 문자열을 허용하지 않고 amount는 0을 초과해야 하는 SalesRecord Pydantic 모델을 정의해 검증 기준을 스키마로 명시했습니다.",
+      "safe_load_csv에서 FileNotFoundError와 OSError를 구분해 처리하고, else 블록으로 성공 로그를, finally 블록으로 '로딩 종료' 표시를 항상 남기도록 구현해 실패해도 프로그램이 죽지 않게 방어했습니다.",
+      "원본 데이터 7건 중 4건은 유효, 3건(month 누락·region 누락·amount 음수)은 의도적으로 깨뜨려 validate_records가 ValidationError를 안전하게 처리하며 valid/errors 리스트로 분리하는지 검증했습니다.",
+      "검증 통과 레코드는 model_dump()로 dict 변환 후 CSV로, 오류 목록은 ensure_ascii=False로 한글이 깨지지 않게 JSON으로 저장했으며, save_results_safely로 쓰기 실패(OSError)까지 방어했습니다.",
+      "원본 로드 실패 시 raw_data가 None인 채로 검증 단계에 넘어가 TypeError로 죽던 경로를 if raw_data is None 가드로 방어하고, [1]~[4] 단계 라벨과 시작/종료 배너로 파이프라인 진행 상황을 한눈에 볼 수 있게 정리했습니다."
+    ],
+
+    result: `
+      존재하지 않는 파일에 대해 safe_load_csv가 예외 없이 None을 반환하는 것부터, 원본 CSV 로드 → 검증(valid 4건/errors 3건) → 저장 → 재로딩(4건)까지 전 단계에서 assert로 기대 건수를 확인하며 '모든 checkpoint 통과'를 출력했습니다.
+    `,
+
+    learned: `
+      예외를 무작정 넓게 잡기보다 FileNotFoundError처럼 흔히 발생하는 상황은 먼저 구체적으로 잡아 메시지를 명확히 하고, else/finally를 함께 써서 '성공 시에만' 또는 '항상' 실행할 코드를 명시적으로 구분하는 것이 디버깅에 유리하다는 점을 배웠습니다. 또한 None을 반환하는 '안전한 실패' 계약을 세웠다면 그 값을 받는 다음 단계에서도 반드시 None을 가드해야 계약이 끝까지 지켜진다는 것을 확인했습니다.
+    `
+  },
+
+  {
+    id: "python-async-api-pipeline",
+
+    title: "비동기 API 수집·검증·저장 파이프라인",
+
+    category: "Python",
+
+    period: "2026.08",
+
+    description:
+      "공개 API 3종을 asyncio+httpx로 동시 수집하고 Pydantic으로 검증한 뒤 CSV·Parquet 두 형식으로 저장하며 성능을 비교한 미니 데이터 파이프라인으로, pytest·ruff까지 함께 적용한 Day1 종합실습 프로젝트입니다.",
+
+    skills: [
+      "Python",
+      "asyncio",
+      "httpx",
+      "Pydantic",
+      "Pandas",
+      "Parquet",
+      "pytest",
+      "ruff",
+      "Logging"
+    ],
+
+    thumbnail: "assets/images/13.파이썬_종합실습1.png",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "종합실습 보고서 PDF 보기",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/13.%ED%8C%90%EA%B5%90_08%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90_day1%EC%A2%85%ED%95%A9%EC%8B%A4%EC%8A%B5%202/%ED%8C%90%EA%B5%90_08%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90_day1%EC%A2%85%ED%95%A9%EC%8B%A4%EC%8A%B5_%EB%B3%B4%EA%B3%A0%EC%84%9C.pdf"
+      },
+      {
+        label: "프로젝트 소스코드 보기",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/tree/main/original-projects/13.%ED%8C%90%EA%B5%90_08%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90_day1%EC%A2%85%ED%95%A9%EC%8B%A4%EC%8A%B5%202/%ED%8C%90%EA%B5%90_08%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90_day1%EC%A2%85%ED%95%A9%EC%8B%A4%EC%8A%B5"
+      }
+    ],
+
+    overview: `
+      Open-Meteo 날씨, Countries.dev 국가정보, ip-api IP위치 3개 공개 API를 asyncio+httpx로 동시에 수집하고, Pydantic으로 값의 타입·범위를 검증한 뒤, 검증을 통과한 데이터를 CSV와 Parquet 두 형식으로 저장하며 어느 쪽이 더 빠른지 비교하는 미니 데이터 파이프라인입니다. 수집(collect) → 검증(schema) → 저장/비교(storage) 세 모듈을 run_pipeline.py가 순서대로 호출하는 구조로 설계했습니다.
+    `,
+
+    process: [
+      "httpx.AsyncClient와 asyncio.gather로 API 3종을 동시에 호출하는 collect 모듈을 만들고, 순차 호출과 비동기 호출의 소요 시간을 compare_speed.py로 직접 비교해 속도 향상을 측정했습니다.",
+      "서울 시간대별 기상 레코드(WeatherRecord)를 Pydantic v2 모델로 정의해 온도·강수확률 등 값의 타입과 범위를 검증하고, 강수확률에 150% 같은 불가능한 값을 넣어 ValidationError가 실제로 잡히는지 demo_validation_error.py로 확인했습니다.",
+      "검증을 통과한 데이터를 pandas DataFrame으로 변환한 뒤 CSV와 Parquet로 각각 저장하고, 저장·재읽기 소요 시간을 측정해 데이터 크기별로 두 포맷의 성능을 비교했습니다.",
+      "검증 오류가 발생해도 파이프라인이 죽지 않도록 output/errors.json에 오류 리포트를 남기고, 유효 데이터가 0건이면 저장 단계로 넘어가지 않고 안전하게 종료하도록 방어 로직을 구현했습니다.",
+      "pytest로 스키마 검증 로직을 테스트하고 pyproject.toml의 pythonpath 설정으로 bare pytest 실행 시 src 모듈을 찾지 못하는 ModuleNotFoundError를 해결했으며, ruff로 린트·포맷 규칙을 적용했습니다."
+    ],
+
+    result: `
+      72행 규모 데이터에서는 오히려 Parquet가 CSV보다 느릴 수 있음을 확인했고, 같은 데이터를 1000배(72,000행)로 복제해 재비교한 결과 데이터가 커질수록 Parquet의 이점이 드러나는 것을 확인했습니다. 비동기 수집은 순차 호출 대비 유의미하게 빨랐고, 의도적으로 깨뜨린 데이터에서는 스키마 검증이 정확히 오류를 잡아냈습니다.
+    `,
+
+    learned: `
+      포맷 선택은 절대적인 정답이 없고 데이터 규모에 따라 CSV와 Parquet의 유불리가 달라진다는 점, asyncio.gather로 I/O 바운드 작업을 동시에 처리하면 순차 호출보다 확실한 속도 이득이 있다는 점을 확인했습니다. 또한 파이프라인의 각 단계(수집·검증·저장)를 별도 모듈로 분리하면 실패 지점을 정확히 특정하고 오류 리포트를 남기기 쉬워진다는 것을 배웠습니다.
+    `
   }
 ];
