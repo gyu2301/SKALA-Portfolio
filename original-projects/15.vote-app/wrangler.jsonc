@@ -1,0 +1,33 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vote-app",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-08-01",
+  "observability": { "enabled": true },
+
+  // React 빌드 결과(dist)를 정적 자산으로 서빙한다.
+  // run_worker_first 가 없으면 SPA 폴백이 /api/* 까지 삼켜 index.html 을 돌려주므로 반드시 필요하다.
+  // /p/* 는 링크 미리보기용 OG 태그를 Worker 가 주입하기 위해 포함시킨다.
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/p/*"]
+  },
+
+  // `wrangler kv namespace create VOTE_KV` 실행 후 출력되는 id 로 교체할 것.
+  // 로컬 개발(`wrangler dev`)은 이 값과 무관하게 로컬 시뮬레이션 KV를 쓴다.
+  "kv_namespaces": [
+    {
+      "binding": "VOTE_KV",
+      "id": "490d8c39334d42cfa8386fc1df21620a",
+      "preview_id": "9f00b98f1df5403ba0eac407ec1b6010"
+    }
+  ]
+
+  // 시크릿은 여기에 적지 말고 아래 명령으로 등록한다.
+  //   wrangler secret put AUTH_SECRET      # 관리 토큰 서명 + 룰렛 시드
+  //   wrangler secret put IP_SALT          # IP 해시 솔트 (원본 IP는 저장하지 않음)
+  //   wrangler secret put ADMIN_PASSWORD   # 전역 관리자 비밀번호
+  // 로컬 개발용 값은 .dev.vars 에 둔다 (git 에 커밋하지 않음).
+}

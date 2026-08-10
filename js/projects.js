@@ -774,5 +774,57 @@ window.projects = [
     learned: `
       p-value는 "차이가 없을 확률"이 아니라 "우연히 이만큼 차이가 날 확률"이라는 점과, 결측 데이터에서 MAR과 MNAR은 관측 데이터만으로는 구분할 수 없다는 근본적인 한계를 실습을 통해 체감했습니다. 또한 예측 성능이 더 높은 모델(HGB·XGBoost)이 항상 최선의 선택은 아니며, 분석 목적이 변수 간 연관 구조를 해석하는 것이라면 오즈비를 직접 해석할 수 있는 로지스틱회귀가 더 적합할 수 있다는 것과, 딥러닝 기반 결측치 대체의 우위도 소수 반복·단일 구현 조건에서는 신중하게 해석해야 한다는 것을 배웠습니다.
     `
+  },
+
+  {
+    id: "vote-app",
+
+    title: "링크 공유형 투표 웹사이트",
+
+    category: "Full-stack Development",
+
+    period: "2026.08",
+
+    description:
+      "계정 없이 링크 하나로 만들고 참여하는 투표 웹사이트로, 선택지 투표와 When2meet 스타일 날짜 조율, 익명/기명·복수선택·기권, 동점 시 결정적 룰렛 또는 재투표, 투표별 관리 비밀번호를 React(Vite)·Cloudflare Workers·Cloudflare KV로 구현하고 Cloudflare에 직접 배포한 원데이 클래스 프로젝트입니다.",
+
+    skills: [
+      "React (Vite)",
+      "Cloudflare Workers",
+      "Cloudflare KV",
+      "REST API 설계",
+      "동시성 처리",
+      "Vitest",
+      "무승부 처리 로직",
+      "Claude Code CLI"
+    ],
+
+    thumbnail: "assets/images/vote-app-thumbnail.png",
+
+    demo: "https://vote-app.choi-gyuwon03-bec.workers.dev",
+    github: "",
+    colab: "",
+
+    overview: `
+      로그인 없이 링크 하나로 만들고 참여하는 투표 웹사이트입니다. 메뉴·가게 등을 고르는 선택지 투표와 When2meet 스타일 그리드로 가능한 시간대를 겹쳐보는 날짜 조율을 모두 지원하며, 익명/기명 전환, 복수선택, 기권, 참여자 명단·완료 현황, 수동/시각/전원완료 마감, 동점 시 결정적 룰렛 또는 동점자 재투표(같은 링크에서 라운드만 증가)까지 하나의 서비스로 구현했습니다. React(Vite) 프론트와 Cloudflare Workers API, Cloudflare KV 저장소로 단일 Worker가 정적 자산과 API를 함께 서빙하도록 구성했습니다.
+    `,
+
+    process: [
+      "익명투표/복수투표 on-off 등 핵심 요구사항을 먼저 정의하고, React(Vite)·Cloudflare Workers·Cloudflare KV 기술 스택을 기준으로 프론트(React SPA)·백엔드(Worker API)·DB(KV) 구조를 설계했습니다.",
+      "'투표 1건 = KV 키 1개' 원칙으로 KV metadata에 집계를 반영해, 여러 사람이 동시에 투표해도 표가 유실되지 않는 동시성 안전 설계를 적용했습니다.",
+      "IP 해시 기반 중복투표 방지(사내 공용망 기준 기본 5명까지 허용), 투표별 관리 비밀번호와 전역 관리자(/admin) 인증을 구현해 익명성과 오남용 방지를 함께 확보했습니다.",
+      "동점 시 결정적(deterministic) 룰렛 뽑기와, 같은 링크에서 라운드만 올려 진행하는 동점자 재투표 두 가지 무승부 처리 UX를 구현했습니다.",
+      "Vitest와 @cloudflare/vitest-pool-workers로 실제 workerd·KV 환경에서 집계·비트마스크·룰렛 결정성 유닛 테스트와, 20명이 동시에 투표해도 표가 유실되지 않는지 확인하는 동시성 API 테스트를 작성했습니다.",
+      "wrangler로 KV 네임스페이스와 시크릿(AUTH_SECRET, IP_SALT, ADMIN_PASSWORD)을 설정하고 Cloudflare Workers에 배포해 실제 접속 가능한 URL로 서비스를 완성했습니다.",
+      "터미널에서 Claude Code CLI로 개발을 진행하며 /model·/effort로 모델과 추론 강도를 전환하고, useraskquestion으로 모호한 요구사항을 되물어 확인하고, /resume으로 세션을 이어가고, esc로 잘못된 질문을 취소하고, option+enter로 프롬프트 안에서 줄바꿈하는 CLI 워크플로우를 익혔습니다."
+    ],
+
+    result: `
+      실제 Cloudflare Workers 주소(vote-app.choi-gyuwon03-bec.workers.dev)로 배포되어 링크만으로 투표 생성·참여가 가능하며, 20명이 동시에 투표하는 동시성 테스트에서도 표 유실 없이 KV 집계가 정확히 반영되는 것을 확인했습니다. 선택지 투표와 날짜 조율(When2meet 그리드) 모두 익명/기명, 복수선택, 기권, 마감 조건, 동점 처리(룰렛/재투표)가 의도대로 동작함을 검증했습니다.
+    `,
+
+    learned: `
+      '투표 1건 = KV 키 1개'처럼 데이터 모델을 동시성 문제에 맞춰 미리 설계하면, 결과적 일관성을 가진 KV 환경에서도 표 유실 없는 집계가 가능하다는 것을 배웠습니다. 또한 Claude Code를 CLI로 다루며 모드 전환(shift+tab), /model·/effort 같은 슬래시 명령, useraskquestion을 통한 요구사항 재확인, /resume으로 세션 이어가기 등 터미널 기반 AI 페어 프로그래밍 워크플로우를 익혔고, Cloudflare Workers·KV로 프론트와 API를 하나의 Worker에서 함께 배포하는 경량 풀스택 배포 방식도 새로 익혔습니다.
+    `
   }
 ];

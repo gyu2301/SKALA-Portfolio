@@ -1,0 +1,4 @@
+# 이 파일을 .dev.vars 로 복사한 뒤 값을 채우세요.
+AUTH_SECRET="관리 토큰 서명 + 룰렛 시드에 쓰는 임의의 긴 문자열"
+IP_SALT="IP 해시용 솔트. 원본 IP는 저장되지 않습니다"
+ADMIN_PASSWORD="전역 관리자(/admin) 비밀번호"
