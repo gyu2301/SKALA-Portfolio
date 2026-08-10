@@ -1,0 +1,170 @@
+{# report.py가 이 템플릿에 분석 결과 값 객체를 채워 outputs/report.md를 생성한다.
+   섹션은 파이프라인 단계와 1:1로 맞춘다. #}
+# Adult Census Income 분석 리포트
+
+생성 일시: {{ generated_at }}
+
+데이터: UCI Adult Census Income — 성인 인구조사 응답으로 연소득이 $50K를 넘는지 예측한다.
+
+## 1. 데이터 로딩 (Pandas vs Polars)
+
+| 라이브러리 | 행 수 | 컬럼 수 | 로딩 시간(초) |
+|---|---:|---:|---:|
+| {{ comparison.pandas.library }} | {{ "{:,}".format(comparison.pandas.rows) }} | {{ comparison.pandas.columns }} | {{ "%.4f"|format(comparison.pandas.elapsed_sec) }} |
+| {{ comparison.polars.library }} | {{ "{:,}".format(comparison.polars.rows) }} | {{ comparison.polars.columns }} | {{ "%.4f"|format(comparison.polars.elapsed_sec) }} |
+
+- 측정 반복 횟수: {{ comparison.repeat }}회 (평균)
+- 두 라이브러리의 로딩 결과 형태 일치: **{{ "일치" if comparison.shape_match else "불일치" }}**
+- 더 빠른 쪽: **{{ comparison.faster_library }}** ({{ "%.2f"|format(comparison.speed_ratio) }}배)
+
+## 2. 결측치 · 중복 처리
+
+| 항목 | 값 |
+|---|---:|
+| 처리 전 행 수 | {{ "{:,}".format(cleaning.rows_before) }} |
+| 처리 후 행 수 | {{ "{:,}".format(cleaning.rows_after) }} |
+| 제거된 중복 행 | {{ "{:,}".format(cleaning.duplicates_removed) }} |
+| 결측 포함 행 | {{ "{:,}".format(cleaning.rows_with_missing) }} ({{ "%.2f"|format(cleaning.missing_row_ratio) }}%) |
+| 처리 전 결측 셀 합계 | {{ "{:,}".format(cleaning.total_missing_before) }} |
+
+처리 전 컬럼별 결측 수:
+
+| 컬럼 | 결측 수 |
+|---|---:|
+{% for column, count in cleaning.missing_before.items() %}
+| {{ column }} | {{ "{:,}".format(count) }} |
+{% endfor %}
+
+결측은 행을 버리지 않고 `Unknown` 범주로 남겼다. 결측이 `workclass`·`occupation`에 함께 몰려 있는
+구조적 결측이라, 행을 지우면 특정 응답 집단이 통째로 빠져 표본이 편향되기 때문이다.
+처리 후 남은 결측: {{ "없음" if not cleaning.missing_after else cleaning.missing_after }}
+
+## 3. 기술통계 · 상관분석
+
+### 3-1. 수치형 변수 기술통계
+
+{{ stats_table }}
+
+### 3-2. 상관계수 행렬
+
+{{ correlation_table }}
+
+상관이 큰 변수쌍:
+
+| 변수 1 | 변수 2 | 상관계수 | 해석 |
+|---|---|---:|---|
+{% for pair in eda.top_pairs %}
+| {{ pair.left }} | {{ pair.right }} | {{ "%.3f"|format(pair.coefficient) }} | {{ pair.strength }} |
+{% endfor %}
+
+### 3-3. 타깃 분포
+
+| 소득 구간 | 인원 수 | 비율(%) |
+|---|---:|---:|
+{% for label, count, ratio in target_distribution %}
+| {{ label }} | {{ "{:,}".format(count) }} | {{ "%.2f"|format(ratio) }} |
+{% endfor %}
+
+### 3-4. 소득 그룹별 수치형 변수 평균
+
+{{ group_means_table }}
+
+### 3-5. IQR 이상치 진단
+
+이상치를 제거하기 위한 표가 아니라, **제거하면 안 되는 근거**를 남기기 위한 진단이다.
+
+| 변수 | 제거 대상 | 제거 비율(%) | 대상의 고소득률 배수 | 판정 |
+|---|---:|---:|---:|---|
+{% for impact in eda.outlier_impacts %}
+| {{ impact.column }} | {{ "{:,}".format(impact.outlier_rows) }} | {{ "%.2f"|format(impact.outlier_ratio) }} | {{ "%.2f"|format(impact.signal_multiple) }}배 | {{ impact.verdict }} |
+{% endfor %}
+
+## 4. 시각화
+
+- 정적 차트 (Seaborn): [`{{ seaborn_path }}`]({{ seaborn_path }})
+- 인터랙티브 차트 (Plotly): [`{{ plotly_path }}`]({{ plotly_path }})
+
+![Seaborn EDA 차트]({{ seaborn_path }})
+
+## 5. 통계 검정
+
+### 5-1. Welch t-test — 소득 그룹 간 평균 차이
+
+등분산을 가정할 근거가 없어 Welch 검정(`equal_var=False`)을 사용했다.
+
+| 변수 | {{ stats.ttests[0].group_a }} 평균 | {{ stats.ttests[0].group_b }} 평균 | t 통계량 | p-value | 유의성 |
+|---|---:|---:|---:|---:|:--:|
+{% for test in stats.ttests %}
+| {{ test.variable }} | {{ "%.2f"|format(test.mean_a) }} | {{ "%.2f"|format(test.mean_b) }} | {{ "%.3f"|format(test.statistic) }} | {{ "%.3e"|format(test.p_value) }} | {{ "유의" if test.significant else "유의하지 않음" }} |
+{% endfor %}
+
+해석:
+
+{% for test in stats.ttests %}
+- **{{ test.variable }}**: {{ test.interpretation }}
+{% endfor %}
+
+### 5-2. 카이제곱 독립성 검정
+
+{% if stats.chi_square %}
+- 검정 대상: `{{ stats.chi_square.left }}` × `{{ stats.chi_square.right }}`
+- χ² = {{ "%.3f"|format(stats.chi_square.chi2) }}, 자유도 = {{ stats.chi_square.dof }}, p-value = {{ "%.3e"|format(stats.chi_square.p_value) }}
+- {{ stats.chi_square.interpretation }}
+{% else %}
+- 수행된 카이제곱 검정이 없다.
+{% endif %}
+
+## 6. 모델 학습 · 평가
+
+### 6-1. 학습 조건
+
+| 항목 | 값 |
+|---|---|
+| 학습 데이터 | {{ "{:,}".format(ml.train_size) }}행 |
+| 테스트 데이터 | {{ "{:,}".format(ml.test_size) }}행 |
+| 전처리 후 피처 수 | {{ ml.feature_count }}개 |
+| 전처리 | `ColumnTransformer` (수치형 `StandardScaler` + 범주형 `OneHotEncoder`) |
+| 구성 | `sklearn.pipeline.Pipeline`으로 전처리와 모델을 하나로 묶어 학습 데이터에만 `fit` |
+
+### 6-2. 후보 모델 비교
+
+선정 기준은 **F1**이다. 양성 클래스가 약 25%인 불균형 데이터라 accuracy는 모든 모델을
+다수 클래스 쪽으로 비슷하게 보이게 만들어 변별력이 떨어진다.
+
+{{ candidate_table }}
+
+### 6-3. 최종 모델 — {{ ml.model_name }}
+
+| 지표 | 값 |
+|---|---:|
+| Accuracy | {{ "%.4f"|format(ml.metrics.accuracy) }} |
+| Precision | {{ "%.4f"|format(ml.metrics.precision) }} |
+| Recall | {{ "%.4f"|format(ml.metrics.recall) }} |
+| F1 | {{ "%.4f"|format(ml.metrics.f1) }} |
+| ROC-AUC | {{ "%.4f"|format(ml.metrics.roc_auc) }} |
+| 다수 클래스 베이스라인 정확도 | {{ "%.4f"|format(ml.majority_baseline_accuracy) }} |
+
+베이스라인 대비 정확도 향상: **{{ "%+.4f"|format(ml.metrics.accuracy - ml.majority_baseline_accuracy) }}**
+
+```
+{{ ml.report_text }}
+```
+
+### 6-4. 민감 속성별 성능 (공정성 점검)
+
+집단 간 재현율 차이는 모델이 어느 집단의 고소득자를 더 자주 놓치는지를 보여준다.
+
+{{ fairness_table }}
+
+### 6-5. 모델 저장
+
+- 저장 경로: [`{{ model_path }}`]({{ model_path }})
+- 재로딩 예측 일치 검증: **{{ "통과" if ml.reload_verified else "실패" }}**
+
+## 7. 결론
+
+- **로딩**: 같은 원본을 Pandas와 Polars로 읽어 행·열 수가 {{ "일치함을 확인했다" if comparison.shape_match else "불일치함을 확인했다" }}. 로딩 속도는 {{ comparison.faster_library }}가 {{ "%.2f"|format(comparison.speed_ratio) }}배 빨랐다.
+- **전처리**: 중복 {{ "{:,}".format(cleaning.duplicates_removed) }}행을 제거하고, 결측은 삭제 대신 `Unknown` 범주로 남겨 {{ "%.2f"|format(cleaning.missing_row_ratio) }}%의 행이 통째로 사라지는 것을 피했다.
+- **통계 검정**: 수치형 {{ stats.ttests|length }}개 중 {{ stats.ttests|selectattr("significant")|list|length }}개 변수에서 소득 그룹 간 평균 차이가 유의수준 0.05에서 유의했다.
+- **모델**: 후보 {{ ml.candidates|length }}개를 동일 조건에서 비교해 F1 기준 **{{ ml.model_name }}**(F1 {{ "%.4f"|format(ml.metrics.f1) }}, ROC-AUC {{ "%.4f"|format(ml.metrics.roc_auc) }})를 선정했다.
+- **한계**: 하이퍼파라미터는 수동 설정값이며 탐색(`GridSearchCV` 등)을 거치지 않았다. 또한 1994년 미국 인구조사 데이터라 현재 소득 구조에 그대로 적용할 수 없고, 6-4의 집단 간 성능 격차는 학습 데이터에 이미 존재하는 격차를 모델이 그대로 재현한 결과에 가깝다.

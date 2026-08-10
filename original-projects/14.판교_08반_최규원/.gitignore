@@ -1,0 +1,30 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.joblib
+
+# --- uv / venv ---
+.venv/
+.python-version
+
+# --- Test / lint / type caches ---
+.pytest_cache/
+.ruff_cache/
+.pyright/
+
+# --- Jupyter ---
+# 노트북 자체는 탐색 기록이므로 커밋한다. 체크포인트만 제외.
+.ipynb_checkpoints/
+
+# --- 원본 데이터 (URL에서 재다운로드 가능하므로 git에 올리지 않는다) ---
+data/*
+!data/.gitkeep
+
+# --- 분석 산출물 (차트 png/html, report.md, 학습된 모델) ---
+outputs/*
+!outputs/.gitkeep
+
+# --- 에디터 / OS ---
+.DS_Store
+.idea/
+.vscode/

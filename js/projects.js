@@ -709,5 +709,70 @@ window.projects = [
     learned: `
       포맷 선택은 절대적인 정답이 없고 데이터 규모에 따라 CSV와 Parquet의 유불리가 달라진다는 점, asyncio.gather로 I/O 바운드 작업을 동시에 처리하면 순차 호출보다 확실한 속도 이득이 있다는 점을 확인했습니다. 또한 파이프라인의 각 단계(수집·검증·저장)를 별도 모듈로 분리하면 실패 지점을 정확히 특정하고 오류 리포트를 남기기 쉬워진다는 것을 배웠습니다.
     `
+  },
+
+  {
+    id: "adult-income-e2e-analysis",
+
+    title: "Adult Census Income End-to-End 데이터 분석",
+
+    category: "Machine Learning",
+
+    period: "2026.08",
+
+    description:
+      "UCI Adult 소득 데이터를 대상으로 가설을 사전 등록하고, 결측 발생 원인을 통계적으로 진단한 뒤 MICE·딥러닝 결측치 대체 기법을 벤치마크하고 분류 모델을 비교한 End-to-End 데이터 분석 프로젝트입니다.",
+
+    skills: [
+      "Python",
+      "Pandas",
+      "Polars",
+      "SciPy",
+      "가설검정",
+      "MICE",
+      "결측치 진단",
+      "Scikit-learn",
+      "XGBoost",
+      "Plotly",
+      "Seaborn",
+      "joblib",
+      "pytest"
+    ],
+
+    thumbnail: "assets/images/14.python.png",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "종합실습 보고서 PDF 보기",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/14.%ED%8C%90%EA%B5%90_08%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90.pdf"
+      },
+      {
+        label: "프로젝트 소스코드 보기",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/tree/main/original-projects/14.%ED%8C%90%EA%B5%90_08%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90"
+      }
+    ],
+
+    overview: `
+      UCI Adult 인구조사 소득 데이터(학습 32,561행·평가 16,281행)를 대상으로, 결과를 보고 나서 해석을 짜맞추지 않도록 검정할 가설과 판정 기준을 분석 전에 먼저 등록하고, 결측치 발생 원인을 통계적으로 진단한 뒤 여러 결측 대체 기법과 분류 모델을 비교한 End-to-End 데이터 분석 프로젝트입니다. Pandas·Polars 이중 로딩 검증부터 통계 검정, MICE·딥러닝(CACTI/TabNAT 스타일) 결측치 대체 벤치마크, 로지스틱회귀 기반 ML 파이프라인까지 하나의 스크립트(main.py)로 재현 가능하게 구성했습니다.
+    `,
+
+    process: [
+      "근로시간-소득 차이(H1), 변수 간 연관(H2), 결측 발생 원인(H3), 대체기법 우열(H4) 4개 가설과 판정 기준(α=0.05)을 분석 전에 사전 등록해, 결과를 본 뒤 이야기를 짜맞추는 것을 방지했습니다.",
+      "Pandas와 Polars로 데이터를 이중 로딩해 행·열 수·결측 수·집계 결과가 1e-9 오차 내로 일치하는지 assert로 검증하고, 두 라이브러리의 로딩·집계 속도를 벤치마크했습니다.",
+      "workclass·occupation 결측 여부를 관측 변수로 예측하는 로지스틱 회귀를 학습해 AUC 0.7185(부트스트랩 95% CI 하한 0.7065)를 확인하고, 이를 근거로 완전 무작위 결측(MCAR) 가정과 양립하기 어렵다는 결론을 내렸습니다(H3).",
+      "값을 일부러 지웠다 복원하는 벤치마크를 설계해 중앙값/최빈값·kNN·MICE(IterativeImputer)와 CACTI·TabNAT 스타일 딥러닝 대체를 MAR/MCAR 시나리오별로 10회씩 반복 비교했습니다(H4).",
+      "Welch t-test와 Pearson/Spearman 상관, 카이제곱검정을 Holm 다중검정 보정과 함께 수행하고, 윈저화 재검정으로 극단값 처리 방식에 따라 결론이 흔들리는지 확인했습니다(H1, H2).",
+      "데이터 누수를 차단한 ColumnTransformer 기반 Pipeline으로 로지스틱회귀·선형SVM·HistGradientBoosting·XGBoost를 학습해 adult.test에서 단 1회 최종 평가하고, joblib으로 모델을 저장·재로드해 예측 일치 여부를 검증했습니다."
+    ],
+
+    result: `
+      고소득(>50K) 그룹은 저소득 그룹보다 주당 근로시간이 평균 6.63시간 더 길었고(95% CI [6.34, 6.92], Hedges' g=0.55), 윈저화 재검정에서도 같은 결론이 유지되었습니다. occupation 결측은 관측 변수로 예측 가능해 MCAR 가정과 양립하기 어려웠으며, 이 진단 하에서 MICE는 수치형 결측 복원 오차를 단순 대체보다 10/10회 안정적으로 줄였습니다. 주 모델인 로지스틱회귀는 F1 0.6518·ROC-AUC 0.9033을, 비교 모델인 HistGradientBoosting은 F1 0.7083으로 더 높은 예측 성능을 기록했습니다.
+    `,
+
+    learned: `
+      p-value는 "차이가 없을 확률"이 아니라 "우연히 이만큼 차이가 날 확률"이라는 점과, 결측 데이터에서 MAR과 MNAR은 관측 데이터만으로는 구분할 수 없다는 근본적인 한계를 실습을 통해 체감했습니다. 또한 예측 성능이 더 높은 모델(HGB·XGBoost)이 항상 최선의 선택은 아니며, 분석 목적이 변수 간 연관 구조를 해석하는 것이라면 오즈비를 직접 해석할 수 있는 로지스틱회귀가 더 적합할 수 있다는 것과, 딥러닝 기반 결측치 대체의 우위도 소수 반복·단일 구현 조건에서는 신중하게 해석해야 한다는 것을 배웠습니다.
+    `
   }
 ];

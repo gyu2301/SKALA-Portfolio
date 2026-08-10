@@ -1,0 +1,61 @@
+[project]
+name = "team-analysis"
+version = "0.1.0"
+description = "Adult Census Income End2End 데이터 분석 (팀 협업 프로젝트)"
+requires-python = ">=3.11"
+dependencies = [
+    "jinja2>=3.1.6",
+    "joblib>=1.5.3",
+    "matplotlib>=3.11.1",
+    "pandas>=3.0.5",
+    "plotly>=6.9.0",
+    "polars>=1.43.2",
+    "pyarrow>=25.0.0",
+    "scikit-learn>=1.9.0",
+    "scipy>=1.17.1",
+    "seaborn>=0.13.2",
+    "tabulate>=0.10.0",
+    "xgboost>=3.2.0",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+    "nbclient>=0.11.0",
+    "pandas-stubs>=3.0.5.260730",
+    "pyright>=1.1.406",
+    "pytest>=9.1.1",
+    "ruff>=0.16.1",
+]
+
+# pytest가 src/ 안의 모듈(data.py, viz.py 등)을 top-level import로 찾을 수 있게 한다.
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# notebooks/legacy/는 모듈화 이전의 개별 실험 스크립트를 원본 그대로 보존한 곳이다.
+# 결과물인 src/가 아니라 탐색 기록이므로 코드 품질 규칙의 적용 대상에서 뺀다.
+# exclude가 아니라 extend-exclude를 쓰는 이유: exclude는 .venv 같은 기본 제외 목록을 덮어쓴다.
+extend-exclude = ["notebooks/legacy"]
+
+[tool.ruff.lint]
+# E/F: pyflakes+pycodestyle, I: import 정렬, UP: 최신 문법, B: 흔한 버그 패턴,
+# ANN: 타입 힌트 누락(규칙 7), BLE/E722: 광범위 except 금지(규칙 10)
+select = ["E", "F", "I", "UP", "B", "ANN", "BLE", "E722"]
+
+[tool.ruff.lint.per-file-ignores]
+# 테스트 함수까지 반환 타입 힌트를 강제하지는 않는다.
+"tests/*" = ["ANN201"]
+
+[tool.pyright]
+# 타입 검사기가 시스템 파이썬이 아니라 이 디렉토리의 uv 가상환경을 보도록 지정한다.
+venvPath = "."
+venv = ".venv"
+extraPaths = ["src"]
+typeCheckingMode = "standard"
+# ruff의 extend-exclude와 같은 이유로 legacy 실험 스크립트는 검사하지 않는다.
+# pyright는 exclude를 지정하면 기본 제외 목록을 덮어쓰므로 기본값을 함께 적어준다.
+exclude = ["**/node_modules", "**/__pycache__", "**/.*", "notebooks/legacy"]
