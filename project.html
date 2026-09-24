@@ -11,6 +11,7 @@
   <meta
     name="description"
     content="최규원의 데이터 분석 및 AI 프로젝트 상세 페이지"
+    data-i18n-content="meta.detailDescription"
   >
 
   <title>프로젝트 상세 | 최규원</title>
@@ -20,6 +21,10 @@
 
   <!-- 프로젝트 정보 파일을 먼저 불러옵니다. -->
   <script src="js/projects.js" defer></script>
+  <script src="js/projects-en.js" defer></script>
+
+  <!-- 언어 전환 기능 파일을 불러옵니다. -->
+  <script src="js/i18n.js" defer></script>
 
   <!-- 상세 페이지 기능 파일을 불러옵니다. -->
   <script src="js/project-detail.js" defer></script>
@@ -33,13 +38,21 @@
         GYUWON<span>.</span>
       </a>
 
-      <nav class="nav">
-        <a href="index.html#home">Home</a>
-        <a href="index.html#projects">Projects</a>
-        <a href="index.html#skills">Skills</a>
-        <a href="index.html#about">About</a>
-        <a href="index.html#contact">Contact</a>
-      </nav>
+      <div class="header-right">
+        <nav class="nav">
+          <a href="index.html#home">Home</a>
+          <a href="index.html#projects">Projects</a>
+          <a href="index.html#skills">Skills</a>
+          <a href="index.html#about">About</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+
+        <!-- 언어 전환 버튼 (i18n.js) -->
+        <div class="lang-toggle" role="group" aria-label="Language">
+          <button type="button" data-lang="ko" lang="ko">KO</button>
+          <button type="button" data-lang="en" lang="en">EN</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -48,7 +61,7 @@
     <div id="project-detail">
       <section class="section">
         <div class="container">
-          <p class="loading-message">
+          <p class="loading-message" data-i18n="projects.loading">
             프로젝트 정보를 불러오는 중입니다.
           </p>
         </div>
@@ -61,7 +74,7 @@
     <div class="container footer-container">
       <p>© 2026 Choi Gyuwon. All rights reserved.</p>
 
-      <a href="index.html">
+      <a href="index.html" data-i18n="footer.home">
         메인 화면으로
       </a>
     </div>

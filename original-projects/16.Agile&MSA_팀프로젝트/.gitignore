@@ -1,0 +1,10 @@
+# 실수로 커밋되지 않도록 방지 (용량/보안)
+node_modules/
+build/
+.gradle/
+*.tar
+*.tar.gz
+*.part.*
+.env
+.env.*
+.DS_Store

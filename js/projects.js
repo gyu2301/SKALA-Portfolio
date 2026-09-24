@@ -826,5 +826,122 @@ window.projects = [
     learned: `
       '투표 1건 = KV 키 1개'처럼 데이터 모델을 동시성 문제에 맞춰 미리 설계하면, 결과적 일관성을 가진 KV 환경에서도 표 유실 없는 집계가 가능하다는 것을 배웠습니다. 또한 Claude Code를 CLI로 다루며 모드 전환(shift+tab), /model·/effort 같은 슬래시 명령, useraskquestion을 통한 요구사항 재확인, /resume으로 세션 이어가기 등 터미널 기반 AI 페어 프로그래밍 워크플로우를 익혔고, Cloudflare Workers·KV로 프론트와 API를 하나의 Worker에서 함께 배포하는 경량 풀스택 배포 방식도 새로 익혔습니다.
     `
+  },
+
+  {
+    id: "eventfit-msa",
+
+    title: "EventFIT - 웨딩 플래닝 MSA 플랫폼",
+
+    category: "Backend & MSA",
+
+    period: "2026.08",
+
+    description:
+      "Spring Boot 마이크로서비스(회원·상품·예약·결제·추천)와 Kafka 이벤트, API Gateway·Eureka·JWT 인증을 갖춘 강의 템플릿 위에, 팀(8반 6조)이 웨딩 도메인으로 치환·확장한 Agile·MSA 팀 프로젝트입니다.",
+
+    skills: [
+      "Spring Boot",
+      "Spring Cloud Gateway",
+      "Eureka",
+      "OAuth2 / JWT",
+      "Apache Kafka",
+      "MariaDB",
+      "FastAPI",
+      "Vue 3",
+      "Docker Compose",
+      "MSA 설계",
+      "이벤트 기반 아키텍처",
+      "Agile/Scrum"
+    ],
+
+    thumbnail: "assets/images/16.EventFIT.png",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "Agile·Scrum & MSA 구조 학습 노트 PDF",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/16.Agile%2BMSA_%EA%B3%BC%EC%A0%9C_8%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90.pdf"
+      }
+    ],
+
+    overview: `
+      Eureka·Auth Server·API Gateway와 회원/상품/예약/결제 Spring Boot 서비스, FastAPI 기반 추천 서비스로 구성된 강의 제공 MSA 템플릿(msa-lecture) 위에, 팀(8반 6조)이 "EventFIT"이라는 웨딩 플래닝 서비스로 도메인을 치환·확장한 팀 프로젝트입니다. 인프라(Eureka·Auth Server·Gateway)는 수정 금지 계약으로 유지하고, 회원·상품·예약·결제·추천 5개 서비스의 엔티티·API·Kafka 페이로드만 웨딩 도메인에 맞게 변경했습니다.
+    `,
+
+    process: [
+      "Waterfall이 아닌 짧은 주기(Sprint)로 만들고·보여주고·고치는 Agile·Scrum 방식을 이해하고, Product Backlog·Sprint Backlog·User Story·DoD를 팀에서 합의해 진행했습니다.",
+      "API Gateway 단일 진입·Eureka 서비스 디스커버리·JWT 기반 인증·Kafka 이벤트 통신이라는 MSA 인프라 계약을 그대로 유지한 채, User(회원 role→user_type)·Course(웨딩 상품: 스튜디오·드레스·메이크업)·Enrollment(예약)·Payment(결제·환불)·Recommend(FastAPI 추천) 5개 서비스의 도메인 로직만 새로 설계했습니다.",
+      "결제 완료 시점에 예약을 동기 응답으로 바꾸지 않고 payment.completed Kafka 이벤트를 발행해 enrollment-service가 이를 구독해 PENDING→ACTIVE로 자동 전이시키는 이벤트 기반 통신을 구현하고, processed_events 테이블로 중복 소비를 막는 멱등(Idempotency) 처리를 추가했습니다.",
+      "환불은 지자체(운영자)가 아닌 업체(VENDOR)가 직접 승인·반려하는 Human-in-the-loop 흐름으로 설계해, 결제-환불-예약취소가 서비스 경계를 넘어 일관되게 처리되도록 payment-service→enrollment-service 내부 API 연동을 구현했습니다.",
+      "예산·우선순위·지역·결혼시점을 입력받아 course-service의 후보 상품을 조회한 뒤 예산 조합을 탐색하는 규칙 기반 추천 엔진(wedding_service)을 recommend-service(FastAPI)에 신규로 추가했습니다.",
+      "docker-compose 파일 경로 오류, Docker 데몬 미기동, compose 파일 부재 상태에서의 실행 시도 등 배포 과정에서 겪은 트러블슈팅을 원인·해결 순으로 기록하며, 에러 메시지만 보고 명령어를 바꾸기보다 파일·엔진 상태를 순서대로 점검하는 습관을 익혔습니다."
+    ],
+
+    result: `
+      MariaDB·Kafka·Eureka·Auth Server·API Gateway와 5개 비즈니스 서비스를 포함한 10개 컨테이너가 docker compose로 정상 기동되었고, 서비스별 Swagger UI·FastAPI 문서 페이지가 모두 정상 응답함을 확인했습니다. 예약 신청 → 결제 → Kafka 이벤트 → 예약 자동 확정, 환불 요청 → 업체 승인 → 예약 취소 흐름이 설계한 시퀀스대로 동작했습니다.
+    `,
+
+    learned: `
+      Agile·Scrum은 계획 없이 빨리 만드는 방식이 아니라 짧은 주기로 점검·개선을 반복하는 방식이라는 점과, MSA는 Gateway·Eureka·Auth·비즈니스 서비스·Kafka가 각자 역할을 나눠 맡고 느슨하게 결합된 구조라는 것을 직접 구현하며 체감했습니다. 또한 인프라 계약(라우팅 경로·Kafka 토픽 구조·JWT 계약)을 유지한 채 도메인 의미만 치환하는 제약이, 오히려 서비스 경계와 책임을 명확히 하는 설계 훈련이 된다는 것을 배웠습니다.
+    `
+  },
+
+  {
+    id: "sllm-fine-tuning-hr-chatbot",
+
+    title: "sLLM Fine-Tuning: RAG·LoRA 기반 HR 규정 챗봇",
+
+    category: "AI & Prompt Engineering",
+
+    period: "2026.08",
+
+    description:
+      "Qwen2.5-1.5B-Instruct를 기반으로 BGE-M3·FAISS Semantic Search(RAG)와 PEFT/LoRA 기반 지도 미세조정(SFT)을 비교·결합해, 회사 고유 HR 규정에 특화된 sLLM 챗봇을 설계한 실습 프로젝트입니다.",
+
+    skills: [
+      "Qwen2.5-1.5B-Instruct",
+      "PEFT / LoRA",
+      "SFT",
+      "RAG",
+      "BGE-M3",
+      "FAISS",
+      "Semantic Search",
+      "Hallucination 평가",
+      "PyTorch"
+    ],
+
+    thumbnail: "",
+
+    github: "",
+    colab: "",
+    links: [
+      {
+        label: "sLLM Fine-Tuning 실습 서브노트 PDF",
+        url: "https://github.com/gyu2301/SKALA-Portfolio/blob/main/original-projects/17.sLLM_Fine_Tuing_%EA%B3%BC%EC%A0%9C_8%EB%B0%98_%EC%B5%9C%EA%B7%9C%EC%9B%90.pdf"
+      }
+    ],
+
+    overview: `
+      범용 LLM이 알지 못하는 회사 고유 HR 규정(재택근무·AI 교육비 지원 등)에 답하게 만드는 두 가지 접근, 지식을 모델 밖에 두고 검색하는 RAG(BGE-M3 임베딩 + FAISS 유사도 검색)와 지식을 모델 안에 학습시키는 SFT(PEFT/LoRA)를 각각 구현하고 비교한 sLLM Fine-Tuning 실습입니다. Base 모델인 Qwen2.5-1.5B-Instruct에 두 방식을 적용해 지식 습득 방식과 응답 형식·행동 학습이라는 서로 다른 문제를 해결하는 역할을 확인했습니다.
+    `,
+
+    process: [
+      "HR 규정 문서 6건(AI 교육비 한도·신청 기한·승인 절차·지원 제외 조건, 리프레시 휴가, 재택근무)을 Chunk 1개=문서 1건으로 정의해 BGE-M3로 임베딩하고 FAISS IndexFlatIP에 저장해 Mini Knowledge Base를 구성했습니다.",
+      "질문이 들어오면 동일한 방식으로 임베딩한 뒤 FAISS에서 유사도 Top-2 문서를 검색하고, 검색된 문서만 Context로 구성해 Qwen에 전달하는 RAG 파이프라인을 구현해 임베딩(BGE-M3)·검색(FAISS)·생성(Qwen) 세 구성요소의 역할을 분리했습니다.",
+      "검색은 성공해도 근거 문서를 모델이 잘못 추론하는 사례('80% 미만이면 제외' 조건을 오독해 70% 질문에 '지원 가능'이라 오답)를 확인하며, RAG만으로는 부족한 조건부 해석을 SFT로 보완할 필요가 있음을 진단했습니다.",
+      "target_modules를 Attention 4개(q/k/v/o_proj)에 MLP 3개(gate/up/down_proj)까지 7개로 넓히고 rank=16으로 설정한 LoraConfig로 PEFT를 적용해, 전체 파라미터 1,562,179,072개 중 18,464,768개(1.18%)만 학습하는 LoRA Adapter 구조를 구성하고 실제 출력값으로 파라미터 수를 직접 검증했습니다.",
+      "회사 인사 규정 안내 system/user/assistant 대화 형식의 SFT 데이터(Train 582건·Validation 97건·Evaluation 20건)로 LoRA Adapter를 학습시키고, Keyword Score·Token F1·Hallucination Rate 세 지표로 Base 모델과 Fine-tuned 모델의 응답을 정량 비교했습니다.",
+      "Jupyter 커널이 프로젝트 가상환경과 분리되는 문제, 학습 로그가 터미널 스크롤백을 넘어 유실되는 문제를 겪으며 ipykernel 등록과 로그 파일 저장(tee)으로 각각 해결했습니다."
+    ],
+
+    result: `
+      평가 20문항 기준 Fine-tuned 모델이 18승(Base 1승, 1무)을 거뒀고, Keyword Score 0.065→0.2, Token F1 0.096→0.22로 개선되었습니다. 전체 파라미터의 1.18%만 학습했음에도 Total Score가 0.086→0.285로 상승했으며, 두 모델 모두 Unknown Policy 질문에 대한 Hallucination Rate 0%를 유지해 모른다고 답하는 안전한 거절 행동이 SFT로도 훼손되지 않음을 확인했습니다.
+    `,
+
+    learned: `
+      RAG는 최신 사실과 근거 문서를 모델 입력에 제공하고 SFT는 응답 형식·태도를 반복 예시로 학습시키는, 서로 다른 문제를 해결하는 상호 보완 관계라는 것을 배웠습니다. 또한 "관련 Chunk가 검색됐다는 사실"과 "그 내용을 LLM이 올바르게 추론하는 것"은 별개의 문제이며, 검색 실패와 생성(추론) 실패를 단계별로 분리해 확인해야 진짜 원인을 알 수 있다는 점, 그리고 LoRA의 저랭크 가설처럼 전체 파라미터의 극히 일부만 학습해도 도메인에 특화된 성능 개선이 가능하다는 것을 실제 수치로 확인했습니다.
+    `
   }
 ];

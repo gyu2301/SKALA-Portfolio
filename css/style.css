@@ -178,6 +178,43 @@ textarea {
   transform: scaleX(1);
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+/* 언어 전환 버튼 */
+.lang-toggle {
+  display: flex;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+.lang-toggle button {
+  padding: 5px 11px;
+  border: 0;
+  border-radius: 999px;
+  background-color: transparent;
+  color: #d8e8f7;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.lang-toggle button:hover {
+  color: var(--white);
+}
+
+.lang-toggle button[aria-pressed="true"] {
+  background-color: var(--sky-400);
+  color: var(--navy-950);
+}
+
 
 /* =========================
    첫 화면
@@ -414,7 +451,7 @@ textarea {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
 }
 
@@ -770,12 +807,28 @@ textarea {
    태블릿 화면
 ========================= */
 
+@media (min-width: 1440px) {
+  :root {
+    --container-width: 1440px;
+  }
+}
+
+@media (min-width: 1800px) {
+  :root {
+    --container-width: 1760px;
+  }
+}
+
 @media (max-width: 900px) {
   .section {
     padding: 90px 0;
   }
 
   .nav {
+    gap: 18px;
+  }
+
+  .header-right {
     gap: 18px;
   }
 
